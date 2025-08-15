@@ -13,7 +13,7 @@ export default function Header(){
     }
 
     function toUsers(){
-        navigate("/users")
+        navigate("/usuarios")
     }
 
     function toInventario(){
