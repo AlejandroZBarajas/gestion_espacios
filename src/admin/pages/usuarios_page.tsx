@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Header from "../components/user_comps/common/header";
+import Header from "../components/common/header";
 import UsuarioCard from "../components/user_comps/usuario_card";
 import UsuarioForm from "../components/user_comps/usuario_form";
 import type UsuarioEntity from "../entities/usuario_entity";

@@ -1,0 +1,37 @@
+import type { Periodo } from "../../entities/periodo";
+import { MdEdit, MdDelete } from "react-icons/md";
+
+interface Props {
+  periodo: Periodo;
+  onEdit: (periodo: Periodo) => void;
+  onDelete: (id: number) => void;
+}
+
+export default function PeriodoCard({ periodo, onEdit, onDelete }: Props) {
+  return (
+    <div className="bg-white rounded-xl shadow-md m-4 p-4 flex flex-col gap-2 border-2 border-moradito">
+      <h2 className="text-lg font-bold text-morado">{periodo.nombre}</h2>
+      <p className="text-sm text-gray-600">
+        {periodo.tipo_periodo} ({periodo.anio})
+      </p>
+      <p className="text-sm text-gray-600">
+        {periodo.fecha_inicio} → {periodo.fecha_fin}
+      </p>
+
+      <div className="flex justify-end gap-3 mt-2">
+        <button
+          onClick={() => onEdit(periodo)}
+          className="text-blue-500 hover:text-blue-700"
+        >
+          <MdEdit size={20} />
+        </button>
+        <button
+          onClick={() => periodo.id && onDelete(periodo.id)}
+          className="text-red-500 hover:text-red-700"
+        >
+          <MdDelete size={20} />
+        </button>
+      </div>
+    </div>
+  );
+}

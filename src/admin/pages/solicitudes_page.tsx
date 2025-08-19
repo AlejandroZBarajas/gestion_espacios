@@ -1,4 +1,4 @@
-import Header from "../components/user_comps/common/header";
+import Header from "../components/common/header";
 
 export default function Solicitudes(){
     return(

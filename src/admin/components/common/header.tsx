@@ -28,6 +28,10 @@ export default function Header(){
         navigate("/reportes")
     }
 
+    function toMaterias(){
+        navigate("/materias")
+    }
+
     return(
         <div id="header" className="w-full flex flex-row justify-evenly bg-morado h-[100px] w-full items-center"> 
             <h2 className="text-moradito text-xl font-bold" onClick={toSolicitudes}>Solicitudes</h2>
@@ -41,6 +45,8 @@ export default function Header(){
             <h2 className="text-moradito text-xl font-bold" onClick={toPeriodos}>Periodos</h2>
         
             <h2 className="text-moradito text-xl font-bold" onClick={toReportes}>Reportes</h2>
+
+            <h2 className="text-moradito text-xl font-bold" onClick={toMaterias}>Materias</h2>
         </div>
 
     )
