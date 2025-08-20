@@ -4,36 +4,51 @@ import PeriodoForm from "../components/periodo_comps/periodo_form";
 import type { Periodo } from "../entities/periodo";
 import { MdAdd } from "react-icons/md";
 import Header from "../components/common/header";
-import { getPeriodos } from "../servicios/periodoService";
+import {
+  getPeriodos,
+  createPeriodo,
+  updatePeriodo,
+  deletePeriodo,
+} from "../servicios/periodoService";
 
 export default function PeriodosPage() {
   const [periodos, setPeriodos] = useState<Periodo[]>([]);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [periodoEditando, setPeriodoEditando] = useState<Periodo | null>(null);
 
-  useEffect(() => {
   const fetchPeriodos = async () => {
     try {
       const data = await getPeriodos();
       setPeriodos(data);
-      console.log(data)
     } catch (error) {
       console.error("Error cargando periodos", error);
     }
   };
 
-  fetchPeriodos();
-}, []);
+  useEffect(() => {
+    fetchPeriodos();
+  }, []);
 
-  const handleSave = (nuevo: Periodo) => {
-    if (periodoEditando) {
-      setPeriodos(
-        periodos.map((p) => (p.periodo_id === periodoEditando.periodo_id ? nuevo : p))
-      );
-    } else {
-      setPeriodos([...periodos, { ...nuevo, periodo_id: Date.now() }]);
+  const handleSave = async (nuevo: Periodo) => {
+    try {
+      if (periodoEditando) {
+        // 🔹 Actualizar en backend
+        const actualizado = await updatePeriodo(periodoEditando.periodo_id!, nuevo);
+        setPeriodos(
+          periodos.map((p) =>
+            p.periodo_id === periodoEditando.periodo_id ? actualizado : p
+          )
+        );
+      } else {
+        // 🔹 Crear en backend
+        const creado = await createPeriodo(nuevo);
+        setPeriodos([...periodos, creado]);
+      }
+      setModalAbierto(false);
+      setPeriodoEditando(null);
+    } catch (err) {
+      console.error("Error guardando periodo:", err);
     }
-    setModalAbierto(false);
   };
 
   const handleEdit = (periodo: Periodo) => {
@@ -41,13 +56,18 @@ export default function PeriodosPage() {
     setModalAbierto(true);
   };
 
-  const handleDelete = (id: number) => {
-    setPeriodos(periodos.filter((p) => p.periodo_id !== id));
+  const handleDelete = async (id: number) => {
+    try {
+      await deletePeriodo(id); // 🔹 Eliminar en backend
+      setPeriodos(periodos.filter((p) => p.periodo_id !== id));
+    } catch (err) {
+      console.error("Error eliminando periodo:", err);
+    }
   };
 
   return (
     <div className="relative">
-      <Header></Header>
+      <Header />
       <div className="w-full h-[100px] flex flex-col justify-center items-center">
         <h2 className="text-morado font-black text-4xl">Periodos</h2>
       </div>

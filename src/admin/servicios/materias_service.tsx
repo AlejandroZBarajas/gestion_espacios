@@ -4,6 +4,7 @@ const API_URL = import.meta.env.VITE_API_URL+"materias";
 
 export async function getMaterias(): Promise<Materia[]> {
   const response = await fetch(API_URL, {
+    credentials: "include", 
     method: "GET",
   });
   if (!response.ok) throw new Error("Error al obtener materias");
@@ -12,6 +13,7 @@ export async function getMaterias(): Promise<Materia[]> {
 
 export async function createMateria(materia: Materia): Promise<Materia> {
   const response = await fetch(API_URL, {
+    credentials: "include", 
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(materia),
@@ -23,6 +25,7 @@ export async function createMateria(materia: Materia): Promise<Materia> {
 export async function updateMateria(id: number, materia: Materia): Promise<Materia> {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
+    credentials: "include", 
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(materia),
   });
@@ -33,6 +36,7 @@ export async function updateMateria(id: number, materia: Materia): Promise<Mater
 export async function deleteMateria(id: number): Promise<void> {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
+    credentials: "include", 
   });
   if (!response.ok) throw new Error("Error al eliminar materia");
 }

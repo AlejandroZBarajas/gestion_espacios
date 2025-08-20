@@ -26,7 +26,7 @@ export default function PeriodoCard({ periodo, onEdit, onDelete }: Props) {
           <MdEdit size={20} />
         </button>
         <button
-          onClick={() => periodo.id && onDelete(periodo.id)}
+          onClick={() => periodo.periodo_id && onDelete(periodo.periodo_id)}
           className="text-red-500 hover:text-red-700"
         >
           <MdDelete size={20} />

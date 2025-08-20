@@ -3,6 +3,7 @@ import type { Periodo } from "../entities/periodo";
 const API_URL = import.meta.env.VITE_API_URL+"periodos"
 
 export const getPeriodos = async (): Promise<Periodo[]> => {
+  console.log("SE UTILIZA EL SERVICIO")
   const res = await fetch(API_URL,{
     credentials: "include", 
   });
@@ -11,7 +12,7 @@ export const getPeriodos = async (): Promise<Periodo[]> => {
 };
 
 export const createPeriodo = async (periodo: Periodo): Promise<Periodo> => {
-  console.log("SE UTILIZA EL FORMULARIO")
+  console.log("SE UTILIZA EL SERVICIO")
   console.log(API_URL)
   const res = await fetch(API_URL, {
     method: "POST",
@@ -24,6 +25,7 @@ export const createPeriodo = async (periodo: Periodo): Promise<Periodo> => {
 };
 
 export const updatePeriodo = async (id: number, periodo: Periodo): Promise<Periodo> => {
+  console.log("SE UTILIZA EL SERVICIO")
   const res = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
     credentials: "include", 
@@ -35,6 +37,7 @@ export const updatePeriodo = async (id: number, periodo: Periodo): Promise<Perio
 };
 
 export const deletePeriodo = async (id: number): Promise<void> => {
+  console.log("SE UTILIZA EL SERVICIO")
   const res = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
     credentials: "include", 

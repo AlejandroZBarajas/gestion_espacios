@@ -24,7 +24,7 @@ export default function MateriaCard({ materia, onEdit, onDelete }: MateriaCardPr
           Editar
         </button>
         <button
-          onClick={() => materia.id && onDelete(materia.id)}
+          onClick={() => materia.materia_id && onDelete(materia.materia_id)}
           className="bg-red-500 text-white px-3 py-1 rounded-xl hover:bg-red-600"
         >
           Eliminar

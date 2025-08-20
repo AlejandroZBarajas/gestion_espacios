@@ -4,6 +4,7 @@ const API_URL = import.meta.env.VITE_API_URL+"planes"
 
 export async function getPlanes():Promise<PlanEntity[]> {
     const response = await fetch (API_URL,{
+      credentials:"include",
         method: "GET"
     })
     if(!response.ok)throw new Error("Error al cargar planes");

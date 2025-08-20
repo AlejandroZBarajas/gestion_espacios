@@ -6,6 +6,7 @@ import {
   updateMateria,
   deleteMateria,
 } from "../servicios/materias_service";
+import Header from "../components/common/header";
 
 
 import type { Materia } from "../entities/materia_entity";
@@ -28,7 +29,7 @@ export default function MateriasPage() {
 
   const handleCreate = async (materia: Materia) => {
     if (editingMateria) {
-      await updateMateria(editingMateria.id!, materia);
+      await updateMateria(editingMateria.materia_id!, materia);
       setEditingMateria(null);
     } else {
       await createMateria(materia);
@@ -42,13 +43,15 @@ export default function MateriasPage() {
   };
 
   return (
-    <div className="p-6 flex flex-col gap-6">
+    <div className="relative">
+      <Header></Header>
+
       <h1 className="text-2xl font-bold">Materias</h1>
       <MateriaForm onSubmit={handleCreate} initialData={editingMateria || undefined} />
       <div className="grid gap-4">
         {materias.map((materia) => (
           <MateriaCard
-            key={materia.id}
+            key={materia.materia_id}
             materia={materia}
             onEdit={setEditingMateria}
             onDelete={handleDelete}
