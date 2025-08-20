@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Periodo } from "../../entities/periodo";
+import { createPeriodo, updatePeriodo } from "../../servicios/periodoService";
 
 interface Props {
   periodo?: Periodo | null;
@@ -15,7 +16,7 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
       fecha_fin: "",
       anio: new Date().getFullYear(),
       tipo_periodo: "Enero-Abril",
-      activo: true, 
+      activo: true,
     }
   );
 
@@ -25,20 +26,33 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
     const { name, value, type } = e.target;
     const checked =
       type === "checkbox" ? (e.target as HTMLInputElement).checked : undefined;
+
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
+    try {
+      let saved: Periodo;
+      if (periodo?.periodo_id) {
+        // 🔹 Actualizar
+        saved = await updatePeriodo(periodo.periodo_id, formData);
+      } else {
+        // 🔹 Crear
+        saved = await createPeriodo(formData);
+      }
+      onSave(saved); 
+    } catch (err) {
+      console.error("Error guardando periodo:", err);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-      <h2 className="text-3xl font-bold text-morado font-bold">
+      <h2 className="text-3xl font-bold text-morado">
         {periodo ? "Editar Periodo" : "Nuevo Periodo"}
       </h2>
 

@@ -4,6 +4,7 @@ import PeriodoForm from "../components/periodo_comps/periodo_form";
 import type { Periodo } from "../entities/periodo";
 import { MdAdd } from "react-icons/md";
 import Header from "../components/common/header";
+import { getPeriodos } from "../servicios/periodoService";
 
 export default function PeriodosPage() {
   const [periodos, setPeriodos] = useState<Periodo[]>([]);
@@ -11,27 +12,26 @@ export default function PeriodosPage() {
   const [periodoEditando, setPeriodoEditando] = useState<Periodo | null>(null);
 
   useEffect(() => {
-    // TODO: fetch desde API cuando esté lista
-    setPeriodos([
-      {
-        id: 1,
-        nombre: "Periodo de prueba",
-        fecha_inicio: "2025-01-01",
-        fecha_fin: "2025-04-30",
-        anio: 2025,
-        tipo_periodo: "Enero-Abril",
-        activo: true,
-      },
-    ]);
-  }, []);
+  const fetchPeriodos = async () => {
+    try {
+      const data = await getPeriodos();
+      setPeriodos(data);
+      console.log(data)
+    } catch (error) {
+      console.error("Error cargando periodos", error);
+    }
+  };
+
+  fetchPeriodos();
+}, []);
 
   const handleSave = (nuevo: Periodo) => {
     if (periodoEditando) {
       setPeriodos(
-        periodos.map((p) => (p.id === periodoEditando.id ? nuevo : p))
+        periodos.map((p) => (p.periodo_id === periodoEditando.periodo_id ? nuevo : p))
       );
     } else {
-      setPeriodos([...periodos, { ...nuevo, id: Date.now() }]);
+      setPeriodos([...periodos, { ...nuevo, periodo_id: Date.now() }]);
     }
     setModalAbierto(false);
   };
@@ -42,7 +42,7 @@ export default function PeriodosPage() {
   };
 
   const handleDelete = (id: number) => {
-    setPeriodos(periodos.filter((p) => p.id !== id));
+    setPeriodos(periodos.filter((p) => p.periodo_id !== id));
   };
 
   return (
@@ -55,7 +55,7 @@ export default function PeriodosPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {periodos.map((periodo) => (
           <PeriodoCard
-            key={periodo.id}
+            key={periodo.periodo_id}
             periodo={periodo}
             onEdit={handleEdit}
             onDelete={handleDelete}

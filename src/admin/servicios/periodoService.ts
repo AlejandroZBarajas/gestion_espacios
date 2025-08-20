@@ -3,14 +3,19 @@ import type { Periodo } from "../entities/periodo";
 const API_URL = import.meta.env.VITE_API_URL+"periodos"
 
 export const getPeriodos = async (): Promise<Periodo[]> => {
-  const res = await fetch(API_URL);
+  const res = await fetch(API_URL,{
+    credentials: "include", 
+  });
   if (!res.ok) throw new Error("Error al obtener periodos");
   return res.json();
 };
 
 export const createPeriodo = async (periodo: Periodo): Promise<Periodo> => {
+  console.log("SE UTILIZA EL FORMULARIO")
+  console.log(API_URL)
   const res = await fetch(API_URL, {
     method: "POST",
+    credentials: "include", 
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(periodo),
   });
@@ -21,6 +26,7 @@ export const createPeriodo = async (periodo: Periodo): Promise<Periodo> => {
 export const updatePeriodo = async (id: number, periodo: Periodo): Promise<Periodo> => {
   const res = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
+    credentials: "include", 
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(periodo),
   });
@@ -31,6 +37,7 @@ export const updatePeriodo = async (id: number, periodo: Periodo): Promise<Perio
 export const deletePeriodo = async (id: number): Promise<void> => {
   const res = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
+    credentials: "include", 
   });
   if (!res.ok) throw new Error("Error al eliminar periodo");
 };

@@ -32,6 +32,14 @@ export default function Header(){
         navigate("/materias")
     }
 
+    function deleteCookie(name: string) {
+        document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+    }
+    function byebye(){
+        deleteCookie("token")
+        navigate("/")
+    }
+
     return(
         <div id="header" className="w-full flex flex-row justify-evenly bg-morado h-[100px] w-full items-center"> 
             <h2 className="text-moradito text-xl font-bold" onClick={toSolicitudes}>Solicitudes</h2>
@@ -47,6 +55,8 @@ export default function Header(){
             <h2 className="text-moradito text-xl font-bold" onClick={toReportes}>Reportes</h2>
 
             <h2 className="text-moradito text-xl font-bold" onClick={toMaterias}>Materias</h2>
+
+            <h4 className="text-moradito" onClick={byebye}>Cerrar sesión</h4>
         </div>
 
     )
