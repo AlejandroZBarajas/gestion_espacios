@@ -8,6 +8,7 @@ import Espacios from "./admin/pages/espacios_page";
 import Inventario from "./admin/pages/inventario_page";
 import Periodos from "./admin/pages/periodos_page";
 import Reportes from "./admin/pages/reportes_page";
+import MateriasPage from "./admin/pages/materias_pages";
 
 export default function App() {
   return (
@@ -19,7 +20,7 @@ export default function App() {
       <Route path="/inventario" element={<Inventario/>} />
       <Route path="/periodos" element={<Periodos/>} />
       <Route path="/reportes" element={<Reportes/>} />
-      {/*<Route path="/materias" element={<Materias/>} /> */}
+      {<Route path="/materias" element={<MateriasPage/>} /> }
     </Routes>
   );
 }
