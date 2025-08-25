@@ -1,8 +1,8 @@
-import type { Materia } from "../entities/materia_entity";
+import type { MateriaEntity } from "../entities/materia_entity";
 
 const API_URL = import.meta.env.VITE_API_URL+"materias"; 
 
-export async function getMaterias(): Promise<Materia[]> {
+export async function getMaterias(): Promise<MateriaEntity[]> {
   const response = await fetch(API_URL, {
     credentials: "include", 
     method: "GET",
@@ -11,7 +11,7 @@ export async function getMaterias(): Promise<Materia[]> {
   return response.json();
 }
 
-export async function createMateria(materia: Materia): Promise<Materia> {
+export async function createMateria(materia: MateriaEntity): Promise<MateriaEntity> {
   const response = await fetch(API_URL, {
     credentials: "include", 
     method: "POST",
@@ -22,7 +22,7 @@ export async function createMateria(materia: Materia): Promise<Materia> {
   return response.json();
 }
 
-export async function updateMateria(id: number, materia: Materia): Promise<Materia> {
+export async function updateMateria(id: number, materia: MateriaEntity): Promise<MateriaEntity> {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
     credentials: "include", 

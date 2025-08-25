@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import type { Materia } from "../../entities/materia_entity";
-import type { PlanEntity } from "../../entities/planes_entity";
-import { getPlanes } from "../../servicios/planes_service";
+import type { MateriaEntity } from "../../../entities/materia_entity";
+import type { PlanEntity } from "../../../entities/planes_entity";
+import { getPlanes } from "../../../servicios/planes_service";
 
 interface MateriaFormProps {
-  onSubmit: (materia: Materia) => void;
-  initialData?: Materia;
+  onSubmit: (materia: MateriaEntity) => void;
+  initialData?: MateriaEntity;
 }
 
 export default function MateriaForm({ onSubmit, initialData }: MateriaFormProps) {
   const [planes, setPlanes] = useState<PlanEntity[]>([]);
-  const [formData, setFormData] = useState<Materia>({
+  const [formData, setFormData] = useState<MateriaEntity>({
     plan_id: 0,
     nombre: "",
     codigo_materia: "",

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import EspacioCard from "../components/espacios/espacios_card";
 import EspacioForm from "../components/espacios/espacios_form";
-import type EspacioEntity from "../entities/espacio_entity";
+import type EspacioEntity from "../../entities/espacio_entity";
 import { MdAdd } from "react-icons/md";
 import Header from "../components/common/header";
 import {
@@ -9,7 +9,7 @@ import {
   createEspacio,
   updateEspacio,
   deleteEspacio,
-} from "../servicios/espacios_service";
+} from "../../servicios/espacios_service";
 
 export default function EspaciosPage() {
   const [espacios, setEspacios] = useState<EspacioEntity[]>([]);

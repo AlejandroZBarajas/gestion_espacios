@@ -1,5 +1,5 @@
 // src/components/MateriaCard.tsx
-import type { Materia } from "../../entities/materia_entity";
+import type { Materia } from "../../../entities/materia_entity";
 
 interface MateriaCardProps {
   materia: Materia;

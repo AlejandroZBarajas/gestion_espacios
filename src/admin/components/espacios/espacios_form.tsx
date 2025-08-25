@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import type EspacioEntity from "../../entities/espacio_entity";
-import type UbicacionEntity from "../../entities/ubicacion_entity";
-import { getUbicaciones } from "../../servicios/ubicaciones_service";
+import type EspacioEntity from "../../../entities/espacio_entity";
+import type UbicacionEntity from "../../../entities/ubicacion_entity";
+import { getUbicaciones } from "../../../servicios/ubicaciones_service";
 
 interface Props {
   espacio?: EspacioEntity | null;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type UsuarioEntity from "../../entities/usuario_entity";
+import type UsuarioEntity from "../../../entities/usuario_entity";
 
 interface Props {
   usuario?: UsuarioEntity | null;

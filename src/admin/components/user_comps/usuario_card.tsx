@@ -1,4 +1,4 @@
-import type UsuarioEntity from "../../entities/usuario_entity";
+import type UsuarioEntity from "../../../entities/usuario_entity";
 
 
 interface Props {

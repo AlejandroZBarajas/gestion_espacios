@@ -7,7 +7,7 @@ export const getEspacios = async (): Promise<EspacioEntity[]> => {
   const res = await fetch(API_URL,{
     credentials: "include", 
   });
-  if (!res.ok) throw new Error("Error al obtener espacios");
+  if (!res.ok) throw new Error("Error al obtener espacios en el get all");
   return res.json();
 };
 

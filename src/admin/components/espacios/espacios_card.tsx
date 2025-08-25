@@ -1,4 +1,4 @@
-import type EspacioEntity from "../../entities/espacio_entity";
+import type EspacioEntity from "../../../entities/espacio_entity";
 import { MdEdit, MdDelete } from "react-icons/md";
 
 interface Props {
@@ -16,7 +16,7 @@ export default function EspacioCard({ espacio, onEdit, onDelete }: Props) {
       <p className="text-sm">Categoría: {espacio.categoria}</p>
       <p className="text-sm">Ubicación: {espacio.ubicacion}</p>
       <p className="text-sm">Capacidad: {espacio.capacidad}</p>
-      <p className={`text-sm font-bold ${espacio.disponible ? "text-green-600" : "text-red-600"}`}>
+      <p className={`text-sm font-bold ${espacio.disponible ? "text-verde" : "text-rojo"}`}>
         {espacio.disponible ? "Disponible" : "No disponible"}
       </p>
 

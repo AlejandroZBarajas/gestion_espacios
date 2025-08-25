@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getCookie } from "./cookie";
 
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [contrasena, setContrasena] = useState("");
   const [error, setError] = useState("");
+
 
   const API_URL = import.meta.env.VITE_API_URL + "auth/login";
 
@@ -23,7 +25,12 @@ export default function Login() {
         const data = await res.json();
         throw new Error(data.message || "Error al iniciar sesión");
       }
-      navigate("/usuarios");
+      const rol = getCookie("rol")
+       if (rol === "administrador") {
+        navigate("/usuarios");
+      } else {
+        navigate("/verespacios");
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);

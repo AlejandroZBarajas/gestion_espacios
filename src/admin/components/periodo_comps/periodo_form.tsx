@@ -1,15 +1,16 @@
 import { useState } from "react";
-import type { Periodo } from "../../entities/periodo";
-import { createPeriodo, updatePeriodo } from "../../servicios/periodoService";
+import type { PeriodoEntity } from "../../../entities/periodo";
+import { createPeriodo, updatePeriodo } from "../../../servicios/periodoService";
+
 
 interface Props {
-  periodo?: Periodo | null;
-  onSave: (periodo: Periodo) => void;
+  periodo?: PeriodoEntity | null;
+  onSave: (periodo: PeriodoEntity) => void;
   onCancel: () => void;
 }
 
 export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
-  const [formData, setFormData] = useState<Periodo>(
+  const [formData, setFormData] = useState<PeriodoEntity>(
     periodo || {
       nombre: "",
       fecha_inicio: "",
@@ -36,7 +37,7 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      let saved: Periodo;
+      let saved: PeriodoEntity;
       if (periodo?.periodo_id) {
         // 🔹 Actualizar
         saved = await updatePeriodo(periodo.periodo_id, formData);

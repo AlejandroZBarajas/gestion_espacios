@@ -5,18 +5,18 @@ import {
   createMateria,
   updateMateria,
   deleteMateria,
-} from "../servicios/materias_service";
+} from "../../servicios/materias_service";
 import Header from "../components/common/header";
 
 
-import type { Materia } from "../entities/materia_entity";
+import type { MateriaEntity } from "../../entities/materia_entity";
 import MateriaCard from "../components/materias_comps/materia_card";
 import MateriaForm from "../components/materias_comps/materia_form";
 
 export default function MateriasPage() {
 
-  const [materias, setMaterias] = useState<Materia[]>([]);
-  const [editingMateria, setEditingMateria] = useState<Materia | null>(null);
+  const [materias, setMaterias] = useState<MateriaEntity[]>([]);
+  const [editingMateria, setEditingMateria] = useState<MateriaEntity | null>(null);
 
   const fetchMaterias = async () => {
     const data = await getMaterias();
@@ -27,7 +27,7 @@ export default function MateriasPage() {
     fetchMaterias();
   }, []);
 
-  const handleCreate = async (materia: Materia) => {
+  const handleCreate = async (materia: MateriaEntity) => {
     if (editingMateria) {
       await updateMateria(editingMateria.materia_id!, materia);
       setEditingMateria(null);

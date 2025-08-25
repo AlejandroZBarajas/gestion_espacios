@@ -1,4 +1,4 @@
-import type { Periodo } from "../../entities/periodo";
+import type { Periodo } from "../../../entities/periodo";
 import { MdEdit, MdDelete } from "react-icons/md";
 
 interface Props {

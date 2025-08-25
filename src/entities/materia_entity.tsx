@@ -1,4 +1,4 @@
-export interface Materia {
+export interface MateriaEntity {
   materia_id?: number;
   plan_id: number;
   nombre: string;

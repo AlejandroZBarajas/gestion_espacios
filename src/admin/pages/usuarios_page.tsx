@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Header from "../components/common/header";
 import UsuarioCard from "../components/user_comps/usuario_card";
 import UsuarioForm from "../components/user_comps/usuario_form";
-import type UsuarioEntity from "../entities/usuario_entity";
+import type UsuarioEntity from "../../entities/usuario_entity";
 import { MdAdd } from "react-icons/md";
 
 export default function Usuarios() {

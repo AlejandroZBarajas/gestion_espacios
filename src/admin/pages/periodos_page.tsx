@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PeriodoCard from "../components/periodo_comps/periodo_card";
 import PeriodoForm from "../components/periodo_comps/periodo_form";
-import type { Periodo } from "../entities/periodo";
+import type { PeriodoEntity } from "../../entities/periodo";
 import { MdAdd } from "react-icons/md";
 import Header from "../components/common/header";
 import {
@@ -9,12 +9,12 @@ import {
   createPeriodo,
   updatePeriodo,
   deletePeriodo,
-} from "../servicios/periodoService";
+} from "../../servicios/periodoService";
 
 export default function PeriodosPage() {
-  const [periodos, setPeriodos] = useState<Periodo[]>([]);
+  const [periodos, setPeriodos] = useState<PeriodoEntity[]>([]);
   const [modalAbierto, setModalAbierto] = useState(false);
-  const [periodoEditando, setPeriodoEditando] = useState<Periodo | null>(null);
+  const [periodoEditando, setPeriodoEditando] = useState<PeriodoEntity | null>(null);
 
   const fetchPeriodos = async () => {
     try {
@@ -29,7 +29,7 @@ export default function PeriodosPage() {
     fetchPeriodos();
   }, []);
 
-  const handleSave = async (nuevo: Periodo) => {
+  const handleSave = async (nuevo: PeriodoEntity) => {
     try {
       if (periodoEditando) {
         // 🔹 Actualizar en backend
@@ -51,7 +51,7 @@ export default function PeriodosPage() {
     }
   };
 
-  const handleEdit = (periodo: Periodo) => {
+  const handleEdit = (periodo: PeriodoEntity) => {
     setPeriodoEditando(periodo);
     setModalAbierto(true);
   };

@@ -1,8 +1,8 @@
-import type { Periodo } from "../entities/periodo";
+import type { PeriodoEntity } from "../entities/periodo";
 
 const API_URL = import.meta.env.VITE_API_URL+"periodos"
 
-export const getPeriodos = async (): Promise<Periodo[]> => {
+export const getPeriodos = async (): Promise<PeriodoEntity[]> => {
 
   const res = await fetch(API_URL,{
     credentials: "include", 
@@ -11,7 +11,7 @@ export const getPeriodos = async (): Promise<Periodo[]> => {
   return res.json();
 };
 
-export const createPeriodo = async (periodo: Periodo): Promise<Periodo> => {
+export const createPeriodo = async (periodo: PeriodoEntity): Promise<PeriodoEntity> => {
 
   const res = await fetch(API_URL, {
     method: "POST",
@@ -23,7 +23,7 @@ export const createPeriodo = async (periodo: Periodo): Promise<Periodo> => {
   return res.json();
 };
 
-export const updatePeriodo = async (id: number, periodo: Periodo): Promise<Periodo> => {
+export const updatePeriodo = async (id: number, periodo: PeriodoEntity): Promise<PeriodoEntity> => {
 
   const res = await fetch(`${API_URL}/${id}`, {
     method: "PUT",

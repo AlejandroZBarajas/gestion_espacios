@@ -1,4 +1,4 @@
-export interface Periodo {
+export interface PeriodoEntity {
   periodo_id?: number; 
   nombre: string;
   fecha_inicio: string; 
