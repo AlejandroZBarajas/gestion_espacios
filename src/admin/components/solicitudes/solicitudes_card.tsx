@@ -1,72 +1,61 @@
-/* import { useState, useEffect } from "react";
-import type SolicitudEntity from "../../../entities/solicitud_entity";
+import type SolicitudPendienteEntity from "../../../entities/solicitud_pendiente_entity";
 
-import { CalendarDays, Users, Clock, BookOpen, MapPin } from "lucide-react";
-
-interface SolicitudCardProps {
-  solicitud: SolicitudEntity;
-  onAceptar: (id: number) => void;
-  onRechazar: (id: number) => void;
+interface Props {
+  solicitud: SolicitudPendienteEntity;
+  onAceptar?: (id: number) => void;
+  onRechazar?: (id: number) => void;
+  editable?: boolean; // Si es true, muestra los botones
 }
 
-
-export default function SolicitudCard({ solicitud, onAceptar, onRechazar }: SolicitudCardProps) {
+const SolicitudCard: React.FC<Props> = ({ solicitud, onAceptar, onRechazar, editable = false }) => {
   return (
-    <Card className="w-full max-w-md rounded-2xl shadow-md p-4">
-      <CardHeader>
-        <h2 className="text-lg font-semibold text-gray-800">
-          Solicitud #{solicitud.solicitud_id}
-        </h2>
-        <p className="text-sm text-gray-500">
-          Estado: <span className="font-medium">{solicitud.estado ?? "Pendiente"}</span>
-        </p>
-      </CardHeader>
+    <div className="bg-white shadow-md rounded-2xl p-4 w-full max-w-md border border-gray-200">
+      <h2 className="text-xl font-semibold text-gray-800 mb-2">
+        Solicitud #{solicitud.solicitud_id}
+      </h2>
 
-      <CardContent className="space-y-2 text-sm">
-        <div className="flex items-center gap-2">
-          <BookOpen className="h-4 w-4 text-blue-600" />
-          <span>Materia ID: {solicitud.materia_id} - Grupo {solicitud.grupo}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <MapPin className="h-4 w-4 text-green-600" />
-          <span>Espacio ID: {solicitud.espacio_id}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Users className="h-4 w-4 text-purple-600" />
-          <span>Asistentes: {solicitud.cantidad_asistentes}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <CalendarDays className="h-4 w-4 text-red-600" />
-          <span>Días: {solicitud.dias.join(", ")}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Clock className="h-4 w-4 text-orange-600" />
-          <span>
-            {solicitud.hora_inicio} - {solicitud.hora_fin}
+      <div className="text-gray-600 space-y-1 text-sm">
+        <p><span className="font-medium">Usuario:</span> {solicitud.usuario}</p>
+        <p><span className="font-medium">Espacio:</span> {solicitud.espacio}</p>
+        <p><span className="font-medium">Periodo:</span> {solicitud.periodo}</p>
+        <p><span className="font-medium">Materia:</span> {solicitud.materia}</p>
+        <p><span className="font-medium">Plan:</span> {solicitud.plan_estudio}</p>
+        <p><span className="font-medium">Grupo:</span> {solicitud.grupo}</p>
+        <p><span className="font-medium">Motivo:</span> {solicitud.motivo}</p>
+        <p>
+          <span className="font-medium">Estado:</span>{" "}
+          <span
+            className={`px-2 py-1 rounded text-xs ${
+              solicitud.estado === "pendiente"
+                ? "bg-yellow-100 text-yellow-700"
+                : solicitud.estado === "aprobada"
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
+            }`}
+          >
+            {solicitud.estado}
           </span>
-        </div>
-        <div>
-          <p className="font-medium">Motivo:</p>
-          <p className="text-gray-700">{solicitud.motivo}</p>
-        </div>
-      </CardContent>
+        </p>
+      </div>
 
-      <CardFooter className="flex justify-between">
-        <Button
-          variant="outline"
-          className="border-red-500 text-red-600 hover:bg-red-50"
-          onClick={() => onRechazar(solicitud.solicitud_id!)}
-        >
-          Rechazar
-        </Button>
-        <Button
-          className="bg-green-600 text-white hover:bg-green-700"
-          onClick={() => onAceptar(solicitud.solicitud_id!)}
-        >
-          Aceptar
-        </Button>
-      </CardFooter>
-    </Card>
+      {editable && solicitud.estado === "pendiente" && (
+        <div className="flex justify-end gap-3 mt-4">
+          <button
+            onClick={() => onAceptar && onAceptar(solicitud.solicitud_id)}
+            className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded"
+          >
+            Aceptar
+          </button>
+          <button
+            onClick={() => onRechazar && onRechazar(solicitud.solicitud_id)}
+            className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+          >
+            Rechazar
+          </button>
+        </div>
+      )}
+    </div>
   );
-}
- */
+};
+
+export default SolicitudCard;
