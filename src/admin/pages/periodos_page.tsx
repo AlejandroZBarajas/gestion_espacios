@@ -10,12 +10,16 @@ import {
   updatePeriodo,
   deletePeriodo,
 } from "../../servicios/periodoService";
+import ConfirmDialog from "../../common/confirm_dialog/confirm_dialog";
 
 export default function PeriodosPage() {
   const [periodos, setPeriodos] = useState<PeriodoEntity[]>([]);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [periodoEditando, setPeriodoEditando] = useState<PeriodoEntity | null>(null);
-
+  const [confirmDialog, setConfirmDialog] = useState<{
+    message: string;
+    id?: number;
+  } | null>(null);
   const fetchPeriodos = async () => {
     try {
       const data = await getPeriodos();
@@ -32,7 +36,6 @@ export default function PeriodosPage() {
   const handleSave = async (nuevo: PeriodoEntity) => {
     try {
       if (periodoEditando) {
-        // 🔹 Actualizar en backend
         const actualizado = await updatePeriodo(periodoEditando.periodo_id!, nuevo);
         setPeriodos(
           periodos.map((p) =>
@@ -40,7 +43,6 @@ export default function PeriodosPage() {
           )
         );
       } else {
-        // 🔹 Crear en backend
         const creado = await createPeriodo(nuevo);
         setPeriodos([...periodos, creado]);
       }
@@ -56,13 +58,21 @@ export default function PeriodosPage() {
     setModalAbierto(true);
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = (id: number) => {
+    setConfirmDialog({
+      message: "¿Estás seguro de eliminar este periodo?",
+      id,
+    });
+  };
+  const confirmDelete = async () => {
+    if (!confirmDialog?.id) return;
     try {
-      await deletePeriodo(id); // 🔹 Eliminar en backend
-      setPeriodos(periodos.filter((p) => p.periodo_id !== id));
+      await deletePeriodo(confirmDialog.id);
+      setPeriodos(periodos.filter((p) => p.periodo_id !== confirmDialog.id));
     } catch (err) {
       console.error("Error eliminando periodo:", err);
     }
+    setConfirmDialog(null); // cerrar diálogo
   };
 
   return (
@@ -105,6 +115,13 @@ export default function PeriodosPage() {
             />
           </div>
         </div>
+      )}
+    {confirmDialog && (
+        <ConfirmDialog
+          message={confirmDialog.message}
+          onConfirm={confirmDelete}
+          onCancel={() => setConfirmDialog(null)}
+        />
       )}
     </div>
   );

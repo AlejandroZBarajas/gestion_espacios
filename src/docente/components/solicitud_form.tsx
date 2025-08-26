@@ -146,7 +146,7 @@ export default function SolicitudForm({
     grupo: String(formData.grupo),
     motivo: String(formData.motivo),
     cantidad_asistentes: Number(formData.cantidad_asistentes),
-    dias: formData.dias.map(Number), // aseguramos que sea un array de números
+    dias: formData.dias.map(Number), 
     hora_inicio: String(formData.hora_inicio),
     hora_fin: String(formData.hora_fin),
   };

@@ -1,9 +1,9 @@
-import type { Periodo } from "../../../entities/periodo";
+import type { PeriodoEntity } from "../../../entities/periodo";
 import { MdEdit, MdDelete } from "react-icons/md";
 
 interface Props {
-  periodo: Periodo;
-  onEdit: (periodo: Periodo) => void;
+  periodo: PeriodoEntity;
+  onEdit: (periodo: PeriodoEntity) => void;
   onDelete: (id: number) => void;
 }
 

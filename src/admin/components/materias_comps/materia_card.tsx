@@ -1,9 +1,9 @@
 // src/components/MateriaCard.tsx
-import type { Materia } from "../../../entities/materia_entity";
+import type { MateriaEntity } from "../../../entities/materia_entity";
 
 interface MateriaCardProps {
-  materia: Materia;
-  onEdit: (materia: Materia) => void;
+  materia: MateriaEntity;
+  onEdit: (materia: MateriaEntity) => void;
   onDelete: (id: number) => void;
 }
 

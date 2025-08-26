@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+/* import { useState, useEffect } from "react";
 import type SolicitudEntity from "../../../entities/solicitud_entity";
 
 import { CalendarDays, Users, Clock, BookOpen, MapPin } from "lucide-react";
@@ -69,3 +69,4 @@ export default function SolicitudCard({ solicitud, onAceptar, onRechazar }: Soli
     </Card>
   );
 }
+ */
