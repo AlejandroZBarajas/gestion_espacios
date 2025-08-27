@@ -1,4 +1,3 @@
-// src/components/MateriaCard.tsx
 import type { MateriaEntity } from "../../../entities/materia_entity";
 
 interface MateriaCardProps {
