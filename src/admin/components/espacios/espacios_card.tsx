@@ -1,5 +1,6 @@
+import { useNavigate } from "react-router-dom";
+import { MdEdit, MdDelete, MdInventory } from "react-icons/md";
 import type EspacioEntity from "../../../entities/espacio_entity";
-import { MdEdit, MdDelete } from "react-icons/md";
 
 interface Props {
   espacio: EspacioEntity;
@@ -8,6 +9,9 @@ interface Props {
 }
 
 export default function EspacioCard({ espacio, onEdit, onDelete }: Props) {
+  const navigate = useNavigate();
+  console.log(espacio)
+
   return (
     <div className="border border-morado rounded-lg shadow-md p-4 flex flex-col justify-between">
       <h3 className="text-xl font-bold text-morado">{espacio.nombre}</h3>
@@ -32,6 +36,12 @@ export default function EspacioCard({ espacio, onEdit, onDelete }: Props) {
           className="flex-1 bg-rojo text-white p-2 rounded flex items-center justify-center gap-1"
         >
           <MdDelete /> Eliminar
+        </button>
+        <button
+          onClick={() => navigate(`/inventario/${espacio.espacio_id}`)}
+          className="flex-1 bg-morado text-white p-2 rounded flex items-center justify-center gap-1"
+        >
+          <MdInventory /> Inventario
         </button>
       </div>
     </div>

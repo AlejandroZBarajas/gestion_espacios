@@ -25,6 +25,7 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
   const [ubicaciones, setUbicaciones] = useState<UbicacionEntity[]>([]);
 
   useEffect(() => {
+    console.log(ubicaciones)
     const fetchUbicaciones = async () => {
       try {
         const data = await getUbicaciones();
@@ -104,7 +105,7 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
         ))}
       </select>
 
-      <input
+    {/*   <input
         type="number"
         name="capacidad"
         placeholder="Capacidad"
@@ -112,7 +113,7 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
         onChange={handleChange}
         className="border p-2 rounded border-morado"
         required
-      />
+      /> */}
 
       <textarea
         name="descripcion"

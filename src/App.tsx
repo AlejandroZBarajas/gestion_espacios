@@ -6,7 +6,7 @@ import { RoleProtectedRoute } from "./common/protected_route";
 import Usuarios from "./admin/pages/usuarios_page";
 import Solicitudes from "./admin/pages/solicitudes_page";
 
-import Inventario from "./admin/pages/inventario_page";
+import InventarioPage from "./admin/pages/inventario_page";
 import Periodos from "./admin/pages/periodos_page";
 import Reportes from "./admin/pages/reportes_page";
 import MateriasPage from "./admin/pages/materias_pages";
@@ -38,7 +38,7 @@ export default function App() {
 
       <Route path="/inventario" element={
         <RoleProtectedRoute allowedRoles={["administrador"]} userRole={userRole}>
-          <Inventario/>
+          <InventarioPage/>
         </RoleProtectedRoute>} />
 
       <Route path="/periodos" element={
