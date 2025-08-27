@@ -11,7 +11,7 @@ const API_URL = import.meta.env.VITE_API_URL+"inventario";
 } */
 
 export async function getInventarioByEspacio(id: number): Promise<InventarioEntity[]> {
-  const res = await fetch(`${API_URL}/${id}`, { 
+  const res = await fetch(`${API_URL}/espacio/${id}`, { 
     credentials: "include", 
     method: "GET" });
   if (!res.ok) throw new Error("Error al obtener inventario por espacio");
