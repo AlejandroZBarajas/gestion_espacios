@@ -3,7 +3,7 @@ export default interface EspacioEntity{
     nombre: string,
     tipo: string,
     categoria: string,
-    ubicacion: string,
+    ubicacionId: number,
     capacidad: number,
     descripcion: string,
     disponible: true

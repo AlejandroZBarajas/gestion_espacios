@@ -15,7 +15,7 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
       nombre: "",
       tipo: "",
       categoria: "",
-      ubicacion: "",
+      ubicacionId: 0,
       capacidad: 0,
       descripcion: "",
       disponible: true,
@@ -37,19 +37,20 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
     fetchUbicaciones();
   }, []);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value, type } = e.target;
-    const checked =
-      type === "checkbox" ? (e.target as HTMLInputElement).checked : undefined;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };
+const handleChange = (
+  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+) => {
+  const { name, value } = e.target
+  setFormData({
+    ...formData,
+    [name]: value,
+  })
+}
+
+
 
   const handleSubmit = (e: React.FormEvent) => {
+    console.log(formData)
     e.preventDefault();
     onSave(formData);
   };
@@ -91,15 +92,15 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
       />
 
       <select
-        name="ubicacion"
-        value={formData.ubicacion}
+        name="ubicacionId"
+        value={formData.ubicacionId}
         onChange={handleChange}
         className="border p-2 rounded border-morado"
         required
       >
         <option value="">Selecciona ubicación</option>
         {ubicaciones.map((u) => (
-          <option key={u.ubicacion_id} value={u.ubicacion}>
+          <option key={u.ubicacion_id} value={u.ubicacion_id}>
             {u.ubicacion}
           </option>
         ))}
