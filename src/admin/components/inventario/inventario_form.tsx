@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type InventarioEntity from "../../../entities/inventario_entity";
 
 interface Props {
   espacioId: number;
   onSubmit: (item: InventarioEntity) => void;
   onCancel: () => void;
+  initialData?: InventarioEntity; // <- añadido
 }
 
-export default function InventarioForm({ espacioId, onSubmit, onCancel }: Props) {
+export default function InventarioForm({ espacioId, onSubmit, onCancel, initialData }: Props) {
   const [form, setForm] = useState<InventarioEntity>({
     espacio_id: espacioId,
     nombre_elemento: "",
@@ -19,6 +20,13 @@ export default function InventarioForm({ espacioId, onSubmit, onCancel }: Props)
     patrimonio: "",
     observaciones: "",
   });
+
+  // Si hay datos iniciales, los cargamos en el formulario
+  useEffect(() => {
+    if (initialData) {
+      setForm({ ...initialData, espacio_id: espacioId }); // aseguramos el espacio_id correcto
+    }
+  }, [initialData, espacioId]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -34,7 +42,9 @@ export default function InventarioForm({ espacioId, onSubmit, onCancel }: Props)
       onSubmit={handleSubmit}
       className="p-4 border border-gray-300 rounded-lg shadow bg-white max-w-md mx-auto"
     >
-      <h2 className="text-xl font-bold mb-3">Nuevo Elemento</h2>
+      <h2 className="text-xl font-bold mb-3">
+        {initialData ? "Editar Elemento" : "Nuevo Elemento"}
+      </h2>
 
       <input
         name="nombre_elemento"
@@ -81,7 +91,7 @@ export default function InventarioForm({ espacioId, onSubmit, onCancel }: Props)
           Cancelar
         </button>
         <button type="submit" className="px-4 py-2 bg-azul text-white rounded">
-          Guardar
+          {initialData ? "Actualizar" : "Guardar"}
         </button>
       </div>
     </form>

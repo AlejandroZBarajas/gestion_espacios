@@ -9,7 +9,7 @@ import {
   createPeriodo,
   updatePeriodo,
   deletePeriodo,
-} from "../../servicios/periodoService";
+} from "../../servicios/periodos_service";
 import ConfirmDialog from "../../common/confirm_dialog/confirm_dialog";
 
 export default function PeriodosPage() {

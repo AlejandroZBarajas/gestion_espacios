@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { PeriodoEntity } from "../../../entities/periodo";
-import { createPeriodo, updatePeriodo } from "../../../servicios/periodoService";
+import { createPeriodo, updatePeriodo } from "../../../servicios/periodos_service";
 
 
 interface Props {

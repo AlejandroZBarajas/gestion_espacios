@@ -13,6 +13,7 @@ import MateriasPage from "./admin/pages/materias_pages";
 import EspaciosPage from "./admin/pages/espacios_page";
 import VerEspaciosPage from "./docente/pages/ver_espacios_page";
 import MisSolicitudesPage from "./docente/pages/mis_solicitudes_page";
+import MisReportesPage from "./docente/pages/mis_reportes_page";
 
 
 export default function App() {
@@ -68,7 +69,7 @@ export default function App() {
 
       <Route path="/misreportes" element={
         <RoleProtectedRoute allowedRoles={["docente"]} userRole={userRole}>
-          <Usuarios />
+          <MisReportesPage />
         </RoleProtectedRoute>} />
 
     </Routes>

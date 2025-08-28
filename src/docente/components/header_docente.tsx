@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom"
+import { Logout } from "../../common/logout"
 
 export default function HeaderDocente(){
 
@@ -19,8 +20,7 @@ export default function HeaderDocente(){
  
 
 function byebye() {
-  document.cookie = "rol=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  Logout()
 
   navigate("/");
 }

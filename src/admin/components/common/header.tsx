@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom"
+import { Logout } from "../../../common/logout"
 
 export default function Header(){
 
@@ -32,11 +33,9 @@ export default function Header(){
         navigate("/materias")
     }
 
-    function deleteCookie(name: string) {
-        document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-    }
+  
     function byebye(){
-        deleteCookie("token")
+        Logout()
         navigate("/")
     }
 

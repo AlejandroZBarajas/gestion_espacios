@@ -2,6 +2,15 @@ import type EspacioEntity from "../entities/espacio_entity";
 
 const API_URL = import.meta.env.VITE_API_URL+"espacios"
 
+export const getEspaciosbyUbicacion = async (ubicacion_id:number): Promise<EspacioEntity[]> => {
+  console.log("SE UTILIZA EL SERVICIO")
+  const res = await fetch(`${API_URL}ubicacion/${ubicacion_id}`,{
+    credentials: "include", 
+  });
+  if (!res.ok) throw new Error("Error al obtener espacios en el get all");
+  return res.json();
+}; 
+
 export const getEspacios = async (): Promise<EspacioEntity[]> => {
   console.log("SE UTILIZA EL SERVICIO")
   const res = await fetch(API_URL,{
@@ -10,6 +19,7 @@ export const getEspacios = async (): Promise<EspacioEntity[]> => {
   if (!res.ok) throw new Error("Error al obtener espacios en el get all");
   return res.json();
 };
+
 
 export const createEspacio = async (espacio: EspacioEntity): Promise<EspacioEntity> => {
   console.log("SE UTILIZA EL SERVICIO")

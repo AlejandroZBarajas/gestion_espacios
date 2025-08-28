@@ -1,31 +1,29 @@
 import { useState, useEffect } from "react";
 import Header from "../components/common/header";
-import InventarioTable from "../components/inventario/inventario_table";
-import InventarioForm from "../components/inventario/inventario_form";
 import type InventarioEntity from "../../entities/inventario_entity";
-import { getInventarioByEspacio, createInventario, deleteInventario } from "../../servicios/inventario_service";
-import ConfirmDialog from "../../common/confirm_dialog/confirm_dialog";
 import type EspacioEntity from "../../entities/espacio_entity";
+import InventarioEspacioSection from "../components/inventario/inventario_espacio_section";
+import ConfirmDialog from "../../common/confirm_dialog/confirm_dialog";
 import { getEspacios } from "../../servicios/espacios_service";
+import { getInventarioByEspacio, createInventario, deleteInventario } from "../../servicios/inventario_service";
 
 export default function InventarioPage() {
   const [inventarioPorEspacio, setInventarioPorEspacio] = useState<Record<number, InventarioEntity[]>>({});
   const [espacios, setEspacios] = useState<EspacioEntity[]>([]);
-  const [showFormEspacio, setShowFormEspacio] = useState<number | null>(null);
-  const [confirmDialog, setConfirmDialog] = useState<{ 
-    message: string; 
-    id?: number; 
+  const [confirmDialog, setConfirmDialog] = useState<{
+    message: string;
+    id?: number;
     espacio_id?: number;
   } | null>(null);
 
-  // Cargar espacios
+  // Obtener todos los espacios
   useEffect(() => {
     getEspacios()
       .then((esp) => setEspacios(esp))
       .catch((err) => console.error(err));
   }, []);
 
-  // Cargar inventario por cada espacio
+  // Obtener inventario por cada espacio
   useEffect(() => {
     espacios.forEach((esp) => {
       if (esp.espacio_id !== undefined) {
@@ -38,19 +36,17 @@ export default function InventarioPage() {
     });
   }, [espacios]);
 
-  // Crear nuevo inventario
+  // Crear nuevo inventario en un espacio
   const handleCreate = async (espacioId: number, item: InventarioEntity) => {
     const nuevo = await createInventario(item);
     setInventarioPorEspacio((prev) => ({
       ...prev,
       [espacioId]: [...(prev[espacioId] || []), nuevo],
     }));
-    setShowFormEspacio(null);
   };
 
-  // Solicitar confirmación de borrado
-  const handleDelete = (id: number, espacio_id?: number) => {
-    if (espacio_id === undefined) return;
+  // Eliminar inventario
+  const handleDelete = (id: number, espacio_id: number) => {
     setConfirmDialog({
       message: "¿Estás seguro de eliminar este elemento del inventario?",
       id,
@@ -58,7 +54,10 @@ export default function InventarioPage() {
     });
   };
 
-  // Confirmar borrado
+  // Editar inventario (vacío por ahora, manejado dentro de InventarioEspacioSection si es necesario)
+  const handleEdit = () => {};
+
+  // Confirmación de eliminación
   const confirmDelete = async () => {
     if (!confirmDialog?.id || confirmDialog.espacio_id === undefined) return;
 
@@ -81,34 +80,17 @@ export default function InventarioPage() {
 
         {espacios
           .filter((esp) => esp.espacio_id !== undefined)
-          .map((esp) => {
-            const id = esp.espacio_id!;
-            return (
-              <div key={id} className="mb-8">
-                <h2 className="text-xl font-semibold text-azul mb-2">{esp.nombre}</h2>
-
-                <button
-                  onClick={() => setShowFormEspacio(id)}
-                  className="mb-2 bg-azul text-white px-4 py-2 rounded shadow"
-                >
-                  + Agregar elemento
-                </button>
-
-                <InventarioTable
-                  data={inventarioPorEspacio[id] || []}
-                  onDelete={(itemId) => handleDelete(itemId, id)}
-                />
-
-                {showFormEspacio === id && (
-                  <InventarioForm
-                    espacioId={id}
-                    onSubmit={(item) => handleCreate(id, item)}
-                    onCancel={() => setShowFormEspacio(null)}
-                  />
-                )}
-              </div>
-            );
-          })}
+          .map((esp) => (
+            <InventarioEspacioSection
+              key={esp.espacio_id}
+              espacioId={esp.espacio_id!}
+              espacioNombre={esp.nombre}
+              data={inventarioPorEspacio[esp.espacio_id!] || []}
+              onCreate={handleCreate}
+              onDelete={(id) => handleDelete(id, esp.espacio_id!)}
+              onEdit={handleEdit}
+            />
+          ))}
 
         {confirmDialog && (
           <ConfirmDialog

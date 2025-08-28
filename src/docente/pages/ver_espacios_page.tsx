@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import HeaderDocente from "../components/header_docente";
 import { getEspacios } from "../../servicios/espacios_service";
 import { getMaterias } from "../../servicios/materias_service";
-import { getPeriodos } from "../../servicios/periodoService";
+import { getPeriodos } from "../../servicios/periodos_service";
 import { createSolicitud } from "../../servicios/solicitudes_service";
 import type EspacioEntity from "../../entities/espacio_entity";
 import type { MateriaEntity } from "../../entities/materia_entity";
