@@ -34,6 +34,7 @@ export default function InventarioForm({ espacioId, onSubmit, onCancel, initialD
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log(form)
     onSubmit(form);
   };
 
@@ -56,8 +57,7 @@ export default function InventarioForm({ espacioId, onSubmit, onCancel, initialD
 
       <select name="tipo" value={form.tipo} onChange={handleChange} className="w-full mb-2 p-2 border rounded">
         <option value="infraestructura">Infraestructura</option>
-        <option value="mueble">Mueble</option>
-        <option value="equipo">Equipo</option>
+        <option value="equipamiento">Equipamiento</option>
       </select>
 
       <select name="estado" value={form.estado} onChange={handleChange} className="w-full mb-2 p-2 border rounded">

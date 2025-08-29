@@ -18,7 +18,7 @@ export default function EspacioCard({ espacio, onEdit, onDelete }: Props) {
       <p className="text-gray-600">{espacio.descripcion}</p>
       <p className="text-sm">Tipo: {espacio.tipo}</p>
       <p className="text-sm">Categoría: {espacio.categoria}</p>
-      <p className="text-sm">Ubicación: {espacio.ubicacionId}</p>
+      {/* <p className="text-sm">Ubicación: {espacio.ubicacion}</p> */}
       <p className="text-sm">Capacidad: {espacio.capacidad}</p>
       <p className={`text-sm font-bold ${espacio.disponible ? "text-verde" : "text-rojo"}`}>
         {espacio.disponible ? "Disponible" : "No disponible"}

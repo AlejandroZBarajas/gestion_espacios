@@ -10,7 +10,7 @@ export async function getInventarioByEspacio(id: number): Promise<InventarioEnti
     return res.json();
   }
   
-  export async function createInventario(data: Omit<InventarioEntity, "inventario_id">): Promise<InventarioEntity> {
+  export async function createInventario(data: InventarioEntity): Promise<InventarioEntity> {
     const res = await fetch(API_URL, {
       credentials: "include",     
       method: "POST",

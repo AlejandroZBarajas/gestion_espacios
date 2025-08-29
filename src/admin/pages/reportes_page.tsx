@@ -1,7 +1,57 @@
+import { useEffect, useState } from "react";
+import ReporteCard from "../../common/reporte_card";
+import type ReporteEntity from "../../entities/reporte_entity";
+import { getReportesPendientes } from "../../servicios/reportes_service";
 import Header from "../components/common/header";
 
-export default function Reportes(){
-    return(
-        <Header></Header>
-    )
+export default function ReportesPendientesPage() {
+  const [reportes, setReportes] = useState<ReporteEntity[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchReportes() {
+      try {
+        const data = await getReportesPendientes();
+        setReportes(data);
+      } catch (err) {
+        console.error(err);
+        setError("Error al cargar reportes pendientes");
+      }
+    }
+    fetchReportes();
+  }, []);
+
+  const handleVer = (id: number) => {
+    console.log("Ver reporte", id);
+    // aquí puedes abrir un modal con el detalle
+  };
+
+  const handleChangeStatus = (id: number) => {
+    console.log("Cambiar estado del reporte", id);
+    // aquí llamas al servicio que cambie el estado
+  };
+
+  return (
+    <div className="relative">
+        <Header/>
+      <h1 className="text-2xl font-bold text-morado mb-4">Reportes Pendientes</h1>
+
+      {error && <p className="text-red-500">{error}</p>}
+
+      <div className="space-y-4">
+        {reportes.length > 0 ? (
+          reportes.map((r) => (
+            <ReporteCard
+              key={r.reporte_id}
+              reporte={r}
+              onEdit={handleVer}
+              changeStatus={handleChangeStatus}
+            />
+          ))
+        ) : (
+          <p className="text-gray-600">No hay reportes pendientes.</p>
+        )}
+      </div>
+    </div>
+  );
 }
