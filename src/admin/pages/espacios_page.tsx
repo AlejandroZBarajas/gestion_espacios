@@ -20,6 +20,7 @@ export default function EspaciosPage() {
     try {
       const data = await getEspacios();
       setEspacios(data);
+      console.log(data)
     } catch (error) {
       console.error("Error cargando espacios", error);
     }

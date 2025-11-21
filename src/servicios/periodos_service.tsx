@@ -12,7 +12,7 @@ export const getPeriodos = async (): Promise<PeriodoEntity[]> => {
 };
 
 export const createPeriodo = async (periodo: PeriodoEntity): Promise<PeriodoEntity> => {
-
+  console.log("periodo recibido en servicio: ",periodo)
   const res = await fetch(API_URL, {
     method: "POST",
     credentials: "include", 
@@ -24,7 +24,9 @@ export const createPeriodo = async (periodo: PeriodoEntity): Promise<PeriodoEnti
 };
 
 export const updatePeriodo = async (id: number, periodo: PeriodoEntity): Promise<PeriodoEntity> => {
-
+  console.log("entra a edicion en el servicio")
+  console.log("periodo_id: ", id)
+  console.log("periodo: ",periodo)
   const res = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
     credentials: "include", 

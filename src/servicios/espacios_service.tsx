@@ -17,6 +17,7 @@ export const getEspacios = async (): Promise<EspacioEntity[]> => {
     credentials: "include", 
   });
   if (!res.ok) throw new Error("Error al obtener espacios en el get all");
+
   return res.json();
 };
 

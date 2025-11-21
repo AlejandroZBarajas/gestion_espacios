@@ -8,7 +8,7 @@ import Solicitudes from "./admin/pages/solicitudes_page";
 
 import InventarioPage from "./admin/pages/inventario_page";
 import Periodos from "./admin/pages/periodos_page";
-import Reportes from "./admin/pages/reportes_page";
+import ReportesPendientesPage from "./admin/pages/reportes_page";
 import MateriasPage from "./admin/pages/materias_pages";
 import EspaciosPage from "./admin/pages/espacios_page";
 import VerEspaciosPage from "./docente/pages/ver_espacios_page";
@@ -18,6 +18,7 @@ import MisReportesPage from "./docente/pages/mis_reportes_page";
 
 export default function App() {
   const userRole = getCookie("rol");
+  console.log(userRole)
   return (
     <Routes>
       <Route path="/" element={<Login />} />
@@ -49,7 +50,7 @@ export default function App() {
 
       <Route path="/reportes" element={
         <RoleProtectedRoute allowedRoles={["administrador"]} userRole={userRole}>
-          <Reportes />
+          <ReportesPendientesPage />
         </RoleProtectedRoute>} />
 
       <Route path="/materias" element={

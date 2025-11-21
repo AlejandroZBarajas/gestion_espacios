@@ -25,6 +25,7 @@ export default function Usuarios() {
   }, []);
 
   const handleEdit = (usuario: UsuarioEntity) => {
+    console.log(usuario)
     setUsuarioEditando(usuario);
     setModalAbierto(true);
   };

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { PeriodoEntity } from "../../../entities/periodo";
-import { createPeriodo, updatePeriodo } from "../../../servicios/periodos_service";
+//import { createPeriodo, updatePeriodo } from "../../../servicios/periodos_service";
 
 
 interface Props {
@@ -12,10 +12,8 @@ interface Props {
 export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
   const [formData, setFormData] = useState<PeriodoEntity>(
     periodo || {
-      nombre: "",
       fecha_inicio: "",
       fecha_fin: "",
-      anio: new Date().getFullYear(),
       tipo_periodo: "Enero-Abril",
       activo: true,
     }
@@ -34,22 +32,12 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      let saved: PeriodoEntity;
-      if (periodo?.periodo_id) {
-        // 🔹 Actualizar
-        saved = await updatePeriodo(periodo.periodo_id, formData);
-      } else {
-        // 🔹 Crear
-        saved = await createPeriodo(formData);
-      }
-      onSave(saved); 
-    } catch (err) {
-      console.error("Error guardando periodo:", err);
-    }
-  };
+ const handleSubmit = (e: React.FormEvent) => {
+  
+  e.preventDefault();
+  onSave(formData);
+};
+
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -57,15 +45,7 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
         {periodo ? "Editar Periodo" : "Nuevo Periodo"}
       </h2>
 
-      <input
-        type="text"
-        name="nombre"
-        placeholder="Nombre"
-        value={formData.nombre}
-        onChange={handleChange}
-        className="border p-2 rounded border-morado"
-        required
-      />
+
 
       <input
         type="date"
@@ -85,14 +65,6 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
         required
       />
 
-      <input
-        type="number"
-        name="anio"
-        value={formData.anio}
-        onChange={handleChange}
-        className="border p-2 rounded border-morado"
-        required
-      />
 
       <select
         name="tipo_periodo"

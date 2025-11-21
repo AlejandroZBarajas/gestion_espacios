@@ -5,7 +5,7 @@ export default interface UsuarioEntity {
   apellido2?: string;
   email: string;
   rol: "administrador" | "docente";
-  contrasena:""
+  contrasena?:string
   fecha_creacion: string;
   activo: boolean;
 }

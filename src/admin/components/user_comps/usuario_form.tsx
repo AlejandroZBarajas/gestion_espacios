@@ -8,17 +8,17 @@ interface Props {
 }
 
 export default function UsuarioForm({ usuario, onSave, onCancel }: Props) {
-  const [formData, setFormData] = useState<Partial<UsuarioEntity>>(
-    usuario || {
-      nombre: "",
-      apellido: "",
-      apellido2: "",
-      email: "",
-      rol: "docente",
-      contrasena: "", 
-      activo: true,
-    }
-  );
+const [formData, setFormData] = useState<Partial<UsuarioEntity>>({
+  nombre: usuario?.nombre ?? "",
+  apellido: usuario?.apellido ?? "",
+  apellido2: usuario?.apellido2 ?? "",
+  email: usuario?.email ?? "",
+  rol: usuario?.rol ?? "docente",
+  contrasena: "",
+  activo: usuario?.activo ?? true,
+  usuario_id: usuario?.usuario_id,   // Necesario para saber si se edita
+});
+
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -45,7 +45,7 @@ export default function UsuarioForm({ usuario, onSave, onCancel }: Props) {
       <h2 className="text-xl font-bold mb-4">
         {usuario ? "Editar Usuario" : "Nuevo Usuario"}
       </h2>
-
+      <label>Nombre</label>
       <input
         type="text"
         name="nombre"
@@ -55,7 +55,7 @@ export default function UsuarioForm({ usuario, onSave, onCancel }: Props) {
         className="w-full border p-2 rounded mb-2"
         required
       />
-
+      <label>Apellido </label>
       <input
         type="text"
         name="apellido"
@@ -66,6 +66,7 @@ export default function UsuarioForm({ usuario, onSave, onCancel }: Props) {
         required
       />
 
+      <label>Segundo apellido</label>
       <input
         type="text"
         name="apellido2"
@@ -74,7 +75,7 @@ export default function UsuarioForm({ usuario, onSave, onCancel }: Props) {
         placeholder="Segundo Apellido"
         className="w-full border p-2 rounded mb-2"
       />
-
+      <label>email</label>
       <input
         type="email"
         name="email"
@@ -87,6 +88,8 @@ export default function UsuarioForm({ usuario, onSave, onCancel }: Props) {
 
       {/* Solo mostrar contraseña en modo creación */}
       {!usuario && (
+        <>
+        <label>Contraseña</label>
         <input
           type="password"
           name="contrasena"
@@ -96,9 +99,10 @@ export default function UsuarioForm({ usuario, onSave, onCancel }: Props) {
           className="w-full border p-2 rounded mb-2"
           required
           minLength={6}
-        />
+          />
+        </>
       )}
-
+      <label>Seleccione el Rol del usuario</label>
       <select
         name="rol"
         value={formData.rol}
