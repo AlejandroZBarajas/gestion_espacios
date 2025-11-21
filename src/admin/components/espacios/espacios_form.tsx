@@ -6,7 +6,7 @@ import { getUbicaciones } from "../../../servicios/ubicaciones_service";
 
 interface Props {
   espacio?: EspacioEntity | null;
-  onSave: (espacio: EspacioFormData) => void;
+  onSave: (espacio: EspacioEntity) => void;
   onCancel: () => void;
 }
 
@@ -140,10 +140,41 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
   // -------------------------
   // SUBMIT
   // -------------------------
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave(formData);
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const payload: EspacioEntity = {
+    espacio_id: formData.espacio_id ?? 0,
+    nombre: formData.nombre,
+    descripcion: formData.descripcion,
+    capacidad: formData.capacidad,
+    disponible: formData.disponible,
+    tipo_id: formData.tipoId,
+    ubicacion_id: formData.ubicacionId,
+    inventarios: formData.inventarios.map(inv => ({
+      espacio_inventario_id: 0,
+      inventario: {
+        inventario_id: 0,
+        cantidad: inv.cantidad,
+        marca: inv.marca,
+        modelo: inv.modelo,
+        patrimonio: inv.patrimonio,
+        estado: "BUENO",
+        observaciones: inv.observaciones,
+        catalogo_elemento: {
+          catalogo_id: inv.catalogo_id,
+          nombre_elemento: "",
+          tipo: "",
+          descripcion: null,
+          fecha_creacion: "",
+        }
+      }
+    })),
   };
+
+  onSave(payload);
+};
+
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">

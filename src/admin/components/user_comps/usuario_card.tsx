@@ -9,6 +9,7 @@ interface Props {
 
 export default function UsuarioCard({ usuario, onEdit, onDelete }: Props) {
   const nombres = `${usuario.nombre} ${usuario.apellido} ${usuario.apellido2 || ""}`.trim();
+  console.log("usuario recibido: ",usuario)
 
   return (
     <div className="bg-gris-clarito border border-gray-300 rounded-lg shadow-md p-4 w-80 flex flex-col justify-between">
