@@ -19,7 +19,7 @@ export default function VerEspaciosPage() {
   const [espacioSeleccionado, setEspacioSeleccionado] = useState<EspacioEntity | null>(null);
 
   const usuarioId = Number(getCookie("id"))
-
+  
   useEffect(() => {
     getEspacios().then(setEspacios);
     getMaterias().then(setMaterias);

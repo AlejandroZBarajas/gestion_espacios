@@ -53,6 +53,7 @@ export default function MateriaForm({ onSubmit, initialData }: MateriaFormProps)
       className="bg-gray-100 p-4 rounded-2xl shadow-md flex flex-col gap-3"
     >
       {/* Select para elegir plan */}
+      <h3>Seleccione un plan de estudio</h3>
       <select
         name="plan_id"
         value={formData.plan_id}
@@ -69,7 +70,7 @@ export default function MateriaForm({ onSubmit, initialData }: MateriaFormProps)
           </option>
         ))}
       </select>
-
+        <h3>Ingrese el nombre de la materia</h3>
       <input
         type="text"
         name="nombre"
@@ -79,6 +80,7 @@ export default function MateriaForm({ onSubmit, initialData }: MateriaFormProps)
         className="p-2 rounded-lg border"
         required
       />
+      <h3>Ingrese el codigo de la materia</h3>
       <input
         type="text"
         name="codigo_materia"
@@ -88,15 +90,24 @@ export default function MateriaForm({ onSubmit, initialData }: MateriaFormProps)
         className="p-2 rounded-lg border"
         required
       />
-      <input
-        type="number"
+      <h3>Cuatrimestre al que pertenece</h3>
+      <select
         name="nivel"
-        placeholder="Nivel"
         value={formData.nivel}
         onChange={handleChange}
         className="p-2 rounded-lg border"
         required
-      />
+      >
+        <option value={0} disabled>
+          Selecciona un cuatrimestre
+        </option>
+
+        {[...Array(10)].map((_, i) => (
+          <option key={i + 1} value={i + 1}>
+            {i + 1}
+          </option>
+        ))}
+      </select>
 
       <button
         type="submit"

@@ -16,7 +16,6 @@ export default function InventarioPage() {
     espacio_id?: number;
   } | null>(null);
 
-  // Obtener todos los espacios
   useEffect(() => {
     getEspacios()
       .then((esp) => setEspacios(esp))
@@ -36,7 +35,6 @@ export default function InventarioPage() {
     });
   }, [espacios]);
 
-  // Crear nuevo inventario en un espacio
   const handleCreate = async (espacioId: number, item: InventarioEntity) => {
     const nuevo = await createInventario(item);
     setInventarioPorEspacio((prev) => ({

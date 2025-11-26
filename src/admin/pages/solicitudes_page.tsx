@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
 import Header from "../components/common/header";
 import SolicitudCard from "../components/solicitudes/solicitudes_card";
@@ -11,6 +12,11 @@ import type SolicitudPendienteEntity from "../../entities/solicitud_pendiente_en
 export default function Solicitudes() {
   const [solicitudes, setSolicitudes] = useState<SolicitudPendienteEntity[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const id = Cookies.get("id");
+  const user_id = Number(id); 
+  
+  const rol = Cookies.get("rol");
 
   useEffect(() => {
     const fetchSolicitudes = async () => {
@@ -28,8 +34,10 @@ export default function Solicitudes() {
   }, []);
 
   const handleAceptar = async (solicitud_id: number) => {
+    console.log(solicitud_id)
     try {
-      const user_id = 1; 
+      
+      console.log(user_id)
       await aceptarSolicitud(solicitud_id, user_id);
 
       setSolicitudes((prev) =>
@@ -43,6 +51,7 @@ export default function Solicitudes() {
   };
 
   const handleRechazar = async (solicitud_id: number) => {
+    console.log(solicitud_id)
     try {
       await rechazarSolicitud(solicitud_id);
       setSolicitudes((prev) =>
@@ -75,6 +84,7 @@ export default function Solicitudes() {
               solicitud={solicitud}
               onAceptar={handleAceptar}
               onRechazar={handleRechazar}
+              editable={rol === "administrador"}
             />
           ))}
         </div>
