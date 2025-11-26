@@ -46,7 +46,7 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
       </h2>
 
 
-
+      <h3>Fecha de inicio</h3>
       <input
         type="date"
         name="fecha_inicio"
@@ -56,6 +56,7 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
         required
       />
 
+      <h3>Fecha de cierre</h3>
       <input
         type="date"
         name="fecha_fin"
@@ -65,7 +66,7 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
         required
       />
 
-
+      <h3>Periodo</h3>
       <select
         name="tipo_periodo"
         value={formData.tipo_periodo}

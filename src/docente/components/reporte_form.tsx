@@ -83,6 +83,7 @@ export default function ReporteFormModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Selección de ubicación */}
+          <h3>Edificio</h3>
           <select
             value={ubicacionId ?? ""}
             onChange={(e) => setUbicacionId(Number(e.target.value))}
@@ -98,6 +99,7 @@ export default function ReporteFormModal({
           </select>
 
           {/* Selección de espacio */}
+          <h3>Espacios disponibles en este edificio</h3>
           <select
             value={espacioId ?? ""}
             onChange={(e) => setEspacioId(Number(e.target.value))}
@@ -114,6 +116,7 @@ export default function ReporteFormModal({
           </select>
 
           {/* Selección de inventario */}
+          <h3>Seleccione artículo a reportar</h3>
           <select
             value={inventarioId || ""}
             onChange={(e) => setInventarioId(Number(e.target.value))}
@@ -130,6 +133,7 @@ export default function ReporteFormModal({
           </select>
 
           {/* Descripción */}
+          <h3>Reporte</h3>
           <textarea
             placeholder="Descripción"
             value={descripcion}

@@ -46,7 +46,7 @@ export default function InventarioForm({ espacioId, onSubmit, onCancel, initialD
       <h2 className="text-xl font-bold mb-3">
         {initialData ? "Editar Elemento" : "Nuevo Elemento"}
       </h2>
-
+      <h3>Nombre del artículo</h3>
       <input
         name="nombre_elemento"
         placeholder="Nombre del elemento"
@@ -54,22 +54,27 @@ export default function InventarioForm({ espacioId, onSubmit, onCancel, initialD
         onChange={handleChange}
         className="w-full mb-2 p-2 border rounded"
       />
-
+      <h3>Categoría del artículo</h3>
       <select name="tipo" value={form.tipo} onChange={handleChange} className="w-full mb-2 p-2 border rounded">
         <option value="infraestructura">Infraestructura</option>
         <option value="equipamiento">Equipamiento</option>
       </select>
 
+      <h3>Estado</h3>
       <select name="estado" value={form.estado} onChange={handleChange} className="w-full mb-2 p-2 border rounded">
         <option value="operativo">Operativo</option>
         <option value="no operativo">No operativo</option>
         <option value="mantenimiento">Mantenimiento</option>
       </select>
 
+      <h3>Marca</h3>
       <input name="marca" placeholder="Marca" value={form.marca} onChange={handleChange} className="w-full mb-2 p-2 border rounded" />
+      <h3>Modelo</h3>
       <input name="modelo" placeholder="Modelo" value={form.modelo} onChange={handleChange} className="w-full mb-2 p-2 border rounded" />
+      <h3>Patrimonio</h3>
       <input name="patrimonio" placeholder="Patrimonio" value={form.patrimonio} onChange={handleChange} className="w-full mb-2 p-2 border rounded" />
 
+      <h3>Descripción</h3>
       <textarea
         name="descripcion"
         placeholder="Descripción"
@@ -77,7 +82,7 @@ export default function InventarioForm({ espacioId, onSubmit, onCancel, initialD
         onChange={handleChange}
         className="w-full mb-2 p-2 border rounded"
       />
-
+      <h3>Observaciones</h3>
       <textarea
         name="observaciones"
         placeholder="Observaciones"
