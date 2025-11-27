@@ -11,9 +11,7 @@ interface Props {
 }
 
 export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
-  // -------------------------
-  // ESTADO DEL FORMULARIO
-  // -------------------------
+
   const [formData, setFormData] = useState<EspacioFormData>(() => {
     if (!espacio) {
       return {
@@ -49,9 +47,7 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
     };
   });
 
-  // -------------------------
-  // UBICACIONES
-  // -------------------------
+
   const [ubicaciones, setUbicaciones] = useState<UbicacionEntity[]>([]);
 
   useEffect(() => {
@@ -66,11 +62,9 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
     fetchUbicaciones();
   }, []);
 
-  // -------------------------
-  // HANDLE CHANGE GENERAL
-  // -------------------------
-  const handleChange = (
-    e: React.ChangeEvent<
+
+/*   const handleChange = (
+    e: React.ChangeEvent<div
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
@@ -100,11 +94,42 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
           return prev;
       }
     });
-  };
+  }; */
 
-  // -------------------------
-  // INVENTARIO CHANGE
-  // -------------------------
+  const handleChange = (
+  e: React.ChangeEvent<
+    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  >
+) => {
+  const target = e.target;
+  const name = target.name as keyof EspacioFormData;
+  let raw: string = target.value;
+
+  if (target.type === "checkbox") {
+    raw = String((target as HTMLInputElement).checked);
+  }
+
+  setFormData((prev) => {
+    switch (name) {
+      case "nombre":
+      case "descripcion":
+        return { ...prev, [name]: raw };
+
+      case "capacidad":
+      case "tipoId":
+      case "ubicacionId":
+        return { ...prev, [name]: Number(raw) };
+
+      case "disponible":
+        return { ...prev, disponible: raw === "true" };
+
+      default:
+        return prev;
+    }
+  });
+};
+
+
   const handleInventarioChange = (
     index: number,
     field: keyof InventarioFormItem,
@@ -137,9 +162,6 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
     setFormData({ ...formData, inventarios: updated });
   };
 
-  // -------------------------
-  // SUBMIT
-  // -------------------------
 const handleSubmit = (e: React.FormEvent) => {
   e.preventDefault();
 
@@ -177,6 +199,7 @@ const handleSubmit = (e: React.FormEvent) => {
 
 
   return (
+    <div className="max-h-screen overflow-y-auto p-2">
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
       <h2 className="text-2xl font-bold text-morado">
         {espacio ? "Editar Espacio" : "Nuevo Espacio"}
@@ -352,5 +375,19 @@ const handleSubmit = (e: React.FormEvent) => {
         </button>
       </div>
     </form>
+     {/* Footer fijo */}
+  <div className="fixed bottom-0 left-0 w-full bg-white p-4 shadow-md flex gap-2">
+    <button type="submit" form="espacioForm" className="flex-1 bg-green-600 text-white p-2 rounded">
+      Guardar
+    </button>
+    <button
+      type="button"
+      onClick={onCancel}
+      className="flex-1 bg-gray-400 p-2 rounded"
+    >
+      Cancelar
+    </button>
+  </div>
+    </div>
   );
 }
