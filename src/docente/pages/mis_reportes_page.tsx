@@ -5,7 +5,8 @@ import ReporteCard from "../../common/reporte_card";
 import ReporteFormModal from "../components/reporte_form";
 
 import { getCookie } from "../../common/cookie";
-import { getMisReportes } from "../../servicios/reportes_service";
+import { getMisReportes, createReporte, updateReporte } from "../../servicios/reportes_service";
+
 import type ReporteEntity from "../../entities/reporte_entity";
 
 export default function MisReportesPage() {
@@ -27,28 +28,42 @@ export default function MisReportesPage() {
     fetchReportes();
   }, [usuarioId]);
 
-  const handleCreateOrUpdate = (data: Omit<ReporteEntity, "reporte_id" | "usuario_id">) => {
+const handleCreateOrUpdate = async (
+  data: Omit<ReporteEntity, "reporte_id" | "usuario_id">
+) => {
+  try {
+    // SI ESTÁ EDITANDO
     if (editItem) {
-      // Edición local
-      setMisReportes((prev) =>
-        prev.map((r) =>
-          r.reporte_id === editItem.reporte_id
-            ? { ...r, ...data }
-            : r
-        )
-      );
-      setEditItem(null);
-    } else {
-      // Creación local (id temporal hasta que API lo devuelva)
-      const nuevo: ReporteEntity = {
-        reporte_id: Date.now(),
+      const actualizado = await updateReporte(editItem.reporte_id!, {
         usuario_id: usuarioId,
         ...data,
-      };
-      setMisReportes((prev) => [...prev, nuevo]);
+      });
+
+      // actualizar en estado local
+      setMisReportes((prev) =>
+        prev.map((r) =>
+          r.reporte_id === editItem.reporte_id ? actualizado : r
+        )
+      );
+
+      setEditItem(null);
+      setModalAbierto(false);
+      return;
     }
+
+    // SI ES CREACIÓN
+    const nuevo = await createReporte({
+      usuario_id: usuarioId,
+      ...data,
+    } as ReporteEntity);
+
+    setMisReportes((prev) => [...prev, nuevo]);
     setModalAbierto(false);
-  };
+  } catch (error) {
+    console.error("Error creando o actualizando reporte:", error);
+  }
+};
+
 
   const handleDelete = (id: number) => {
     setMisReportes((prev) => prev.filter((r) => r.reporte_id !== id));

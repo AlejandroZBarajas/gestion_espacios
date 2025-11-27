@@ -41,3 +41,22 @@ export async function changeStatusReporte(id: number) {
   return res.json();
   
 }
+
+export async function updateReporte(
+  reporte_id: number,
+  data: Partial<ReporteEntity>
+): Promise<ReporteEntity> {
+  const response = await fetch(`${API_URL}/reporte/${reporte_id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Error al actualizar el reporte");
+  }
+
+  return await response.json();
+}
