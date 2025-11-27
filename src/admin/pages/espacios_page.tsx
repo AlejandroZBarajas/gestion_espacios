@@ -188,7 +188,7 @@ const handleSave = async (espacio: EspacioEntity) => {
 
 
   return (
-    <div className="p-4">
+    <div className="relative">
 
       <Header/>
 
