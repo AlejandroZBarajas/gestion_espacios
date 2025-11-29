@@ -1,4 +1,4 @@
-import { MdDelete, MdEdit } from "react-icons/md";
+//import { MdDelete, MdEdit } from "react-icons/md";
 import type InventarioEntity from "../../../entities/inventario_entity";
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
   onEdit: (item: InventarioEntity) => void;
 }
 
-export default function InventarioTable({ data, onDelete, onEdit }: Props) {
+export default function InventarioTable({ data,/*  onDelete, onEdit */ }: Props) {
   return (
     <table className="w-full border border-gray-300 rounded-lg shadow-sm text-sm">
       <thead className="bg-gray-100">
@@ -31,7 +31,7 @@ export default function InventarioTable({ data, onDelete, onEdit }: Props) {
             <td className="p-2">{item.modelo}</td>
             <td className="p-2">{item.patrimonio}</td>
             <td className="p-2 text-center flex justify-center gap-1">
-              <button
+           {/*    <button
                 onClick={() => onEdit(item)}
                 className="bg-yellow-500 text-white px-3 py-1 rounded flex items-center gap-1"
               >
@@ -42,7 +42,7 @@ export default function InventarioTable({ data, onDelete, onEdit }: Props) {
                 className="bg-red-600 text-white px-3 py-1 rounded flex items-center gap-1"
               >
                 <MdDelete /> Eliminar
-              </button>
+              </button> */}
             </td>
           </tr>
         ))}

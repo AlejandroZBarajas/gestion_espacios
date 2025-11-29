@@ -2,7 +2,7 @@ import { useState } from "react";
 import type InventarioEntity from "../../../entities/inventario_entity";
 import InventarioTable from "./inventario_table";
 import InventarioForm from "./inventario_form";
-import { MdAdd } from "react-icons/md";
+//import { MdAdd } from "react-icons/md";
 
 interface Props {
   espacioId: number;
@@ -48,12 +48,12 @@ export default function InventarioEspacioSection({
     <div className="mb-8 relative">
       <h2 className="text-xl font-semibold text-azul mb-2">{espacioNombre}</h2>
 
-      <button
+    {/*   <button
         onClick={() => setShowForm(true)}
         className="mb-2 bg-azul text-white px-4 py-2 rounded shadow flex items-center gap-1"
       >
         <MdAdd /> Agregar elemento
-      </button>
+      </button> */}
 
       <InventarioTable
         data={data}
