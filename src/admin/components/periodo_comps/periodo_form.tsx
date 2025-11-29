@@ -22,13 +22,13 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value, type } = e.target;
+    const { name, value, type  } = e.target;
     const checked =
-      type === "checkbox" ? (e.target as HTMLInputElement).checked : undefined;
+      type === "checkbox" ? (e.target as HTMLInputElement).checked : undefined; 
 
     setFormData({
       ...formData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]:  type === "checkbox" ? checked :value,
     });
   };
 
@@ -86,7 +86,7 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
           onChange={handleChange}
         />
         Activo
-      </label>
+      </label> 
 
       <div className="flex gap-2">
         <button type="submit" className="flex-1 bg-verde text-white p-2 rounded">

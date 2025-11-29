@@ -11,3 +11,18 @@ export async function getPlanes():Promise<PlanEntity[]> {
   return response.json();
     
 }
+
+export async function getPlanName(id:number):Promise<string>{
+  const res = await fetch (`${API_URL}/${id}`,{
+    credentials: "include",     
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  })
+
+  if (!res.ok) throw new Error("Error al crear inventario");
+
+  const plan: PlanEntity = await res.json();
+  console.log(plan.nombre_carrera)
+  return plan.nombre_carrera; 
+
+}

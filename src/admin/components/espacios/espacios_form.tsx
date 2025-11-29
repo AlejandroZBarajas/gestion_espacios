@@ -1,16 +1,35 @@
 import { useEffect, useState } from "react";
 import type EspacioEntity from "../../../entities/espacio_entity";
+import type { CatalogoElementoEntity } from "../../../entities/catalogo_elemento_entity";
 import type UbicacionEntity from "../../../entities/ubicacion_entity";
 import type { EspacioFormData, InventarioFormItem } from "../../../entities/espacio_form_entity";
 import { getUbicaciones } from "../../../servicios/ubicaciones_service";
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import type { UpdateEspacioDTO } from "../../../entities/update_espacio_DTO";
+import { getCatalogo } from "../../../servicios/catalogo_service";
 
 interface Props {
   espacio?: EspacioEntity | null;
-  onSave: (espacio: EspacioEntity) => void;
+  onSave: (espacio: UpdateEspacioDTO) => void;
   onCancel: () => void;
 }
 
 export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
+
+const [showCatalogoSelector, setShowCatalogoSelector] = useState(false);
+const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
+
+const toggleCard = (index: number) => {
+  setExpandedCards(prev => {
+    const newSet = new Set(prev);
+    if (newSet.has(index)) {
+      newSet.delete(index);
+    } else {
+      newSet.add(index);
+    }
+    return newSet;
+  });
+}
 
   const [formData, setFormData] = useState<EspacioFormData>(() => {
     if (!espacio) {
@@ -25,7 +44,6 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
       };
     }
 
-    // Convertir inventarios anidados → inventario plano
     const inventariosPlano: InventarioFormItem[] = espacio.inventarios.map((item) => ({
       catalogo_id: item.inventario.catalogo_elemento.catalogo_id,
       cantidad: item.inventario.cantidad,
@@ -33,6 +51,7 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
       modelo: item.inventario.modelo ?? "",
       patrimonio: item.inventario.patrimonio ?? "",
       observaciones: item.inventario.observaciones ?? "",
+      catalogo_elemento: item.inventario.catalogo_elemento
     }));
 
     return {
@@ -63,38 +82,20 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
   }, []);
 
 
-/*   const handleChange = (
-    e: React.ChangeEvent<div
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const target = e.target;
-    const name = target.name as keyof EspacioFormData;
-    let raw: string = target.value;
+  const [catalogo, setCatalogo] = useState<CatalogoElementoEntity[]>([])
 
-    if (target.type === "checkbox") {
-      raw = String((target as HTMLInputElement).checked);
-    }
-
-    setFormData((prev) => {
-      switch (name) {
-        case "nombre":
-        case "descripcion":
-          return { ...prev, [name]: raw };
-
-        case "capacidad":
-        case "tipoId":
-        case "ubicacionId":
-          return { ...prev, [name]: Number(raw) };
-
-        case "disponible":
-          return { ...prev, disponible: raw === "true" };
-
-        default:
-          return prev;
+  useEffect(()=> {
+    const fetchCatalogo = async () => {
+      try{
+        const data = await getCatalogo()
+        setCatalogo(data)
+      }catch (error){
+        console.log(error)
       }
-    });
-  }; */
+    }
+    fetchCatalogo()
+  },[])
+
 
   const handleChange = (
   e: React.ChangeEvent<
@@ -140,22 +141,24 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
     setFormData({ ...formData, inventarios: updated });
   };
 
-  const agregarItemInventario = () => {
-    setFormData({
-      ...formData,
-      inventarios: [
-        ...formData.inventarios,
-        {
-          catalogo_id: 0,
-          cantidad: 0,
-          marca: "",
-          modelo: "",
-          patrimonio: "",
-          observaciones: "",
-        },
-      ],
-    });
-  };
+ const agregarItemInventario = (catalogoElemento: CatalogoElementoEntity) => {
+  setFormData({
+    ...formData,
+    inventarios: [
+      ...formData.inventarios,
+      {
+        catalogo_id: catalogoElemento.catalogo_id,
+        cantidad: 1,
+        marca: "",
+        modelo: "",
+        patrimonio: "",
+        observaciones: "",
+        catalogo_elemento: catalogoElemento, // ✅ Incluye el objeto completo
+      },
+    ],
+  });
+  setShowCatalogoSelector(false); // Cierra el selector
+};
 
   const eliminarItemInventario = (index: number) => {
     const updated = formData.inventarios.filter((_, i) => i !== index);
@@ -165,38 +168,25 @@ export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
 const handleSubmit = (e: React.FormEvent) => {
   e.preventDefault();
 
-  const payload: EspacioEntity = {
-    espacio_id: formData.espacio_id ?? 0,
+  const payload: UpdateEspacioDTO = {
     nombre: formData.nombre,
-    descripcion: formData.descripcion,
+    ubicacionId: formData.ubicacionId,
     capacidad: formData.capacidad,
+    descripcion: formData.descripcion,
     disponible: formData.disponible,
-    tipo_id: formData.tipoId,
-    ubicacion_id: formData.ubicacionId,
-    inventarios: formData.inventarios.map(inv => ({
-      espacio_inventario_id: 0,
-      inventario: {
-        inventario_id: 0,
-        cantidad: inv.cantidad,
-        marca: inv.marca,
-        modelo: inv.modelo,
-        patrimonio: inv.patrimonio,
-        estado: "BUENO",
-        observaciones: inv.observaciones,
-        catalogo_elemento: {
-          catalogo_id: inv.catalogo_id,
-          nombre_elemento: "",
-          tipo: "",
-          descripcion: null,
-          fecha_creacion: "",
-        }
-      }
-    })),
+    tipoId: formData.tipoId,
+    inventario: formData.inventarios.map(inv => ({
+      catalogo_id: inv.catalogo_id,
+      cantidad: inv.cantidad,
+      marca: inv.marca,
+      modelo: inv.modelo,
+      patrimonio: inv.patrimonio,
+      observaciones: inv.observaciones,
+    }))
   };
 
-  onSave(payload);
+  onSave(payload); 
 };
-
 
   return (
     <div className="max-h-screen overflow-y-auto p-2">
@@ -205,7 +195,6 @@ const handleSubmit = (e: React.FormEvent) => {
         {espacio ? "Editar Espacio" : "Nuevo Espacio"}
       </h2>
 
-      {/* Nombre */}
       <label>Nombre</label>
       <input
         type="text"
@@ -216,8 +205,7 @@ const handleSubmit = (e: React.FormEvent) => {
         required
       />
 
-      {/* Tipo */}
-      <label>Tipo ID</label>
+      <label>Categoría</label>
       <input
         type="number"
         name="tipoId"
@@ -227,7 +215,6 @@ const handleSubmit = (e: React.FormEvent) => {
         required
       />
 
-      {/* Ubicación */}
       <label>Ubicación</label>
       <select
         name="ubicacionId"
@@ -244,7 +231,6 @@ const handleSubmit = (e: React.FormEvent) => {
         ))}
       </select>
 
-      {/* Capacidad */}
       <label>Capacidad</label>
       <input
         type="number"
@@ -255,7 +241,6 @@ const handleSubmit = (e: React.FormEvent) => {
         required
       />
 
-      {/* Descripción */}
       <textarea
         name="descripcion"
         className="border p-2 rounded"
@@ -264,7 +249,6 @@ const handleSubmit = (e: React.FormEvent) => {
         onChange={handleChange}
       />
 
-      {/* Disponible */}
       <label className="flex items-center gap-2">
         <input
           type="checkbox"
@@ -275,24 +259,52 @@ const handleSubmit = (e: React.FormEvent) => {
         Disponible
       </label>
 
-      {/* INVENTARIO */}
       <h3 className="text-xl font-bold mt-4">Inventario</h3>
 
-      {formData.inventarios.map((item, index) => (
-        <div key={index} className="border p-3 rounded flex flex-col gap-2">
-          <h4 className="text-lg font-semibold">Item {index + 1}</h4>
+{formData.inventarios.map((item, index) => {
+  const isExpanded = expandedCards.has(index);
+  
+  return (
+    <div key={index} className="border-2 border-morado rounded-xl overflow-hidden bg-white shadow-md">
+      {/* Header - Siempre visible */}
+      <div 
+        className="p-4 bg-blanco cursor-pointer hover:bg-blue-50 transition-colors"
+        onClick={() => toggleCard(index)}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3 flex-1">
+            <h4 className="font-bold text-xl text-morado">
+              {item.catalogo_elemento?.nombre_elemento || 'Sin nombre'}
+            </h4>
+            <span className="bg-moradito text-morado px-3 py-1 rounded-full text-sm font-semibold">
+              Cantidad: {item.cantidad}
+            </span>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                eliminarItemInventario(index);
+              }}
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
+            >
+              Eliminar
+            </button>
+            
+            {isExpanded ? (
+              <ChevronUp className="w-6 h-6 text-morado" />
+            ) : (
+              <ChevronDown className="w-6 h-6 text-morado" />
+            )}
+          </div>
+        </div>
+      </div>
 
-          <input
-            type="number"
-            placeholder="catalogo_id"
-            value={item.catalogo_id}
-            onChange={(e) =>
-              handleInventarioChange(index, "catalogo_id", Number(e.target.value))
-            }
-            className="border p-2 rounded"
-            required
-          />
-
+      {/* Contenido colapsable - Solo visible cuando está expandido */}
+      {isExpanded && (
+        <div className="p-4 space-y-3 bg-gray-50">
           <input
             type="number"
             placeholder="cantidad"
@@ -300,7 +312,7 @@ const handleSubmit = (e: React.FormEvent) => {
             onChange={(e) =>
               handleInventarioChange(index, "cantidad", Number(e.target.value))
             }
-            className="border p-2 rounded"
+            className="border p-2 rounded w-full"
             required
           />
 
@@ -311,7 +323,7 @@ const handleSubmit = (e: React.FormEvent) => {
             onChange={(e) =>
               handleInventarioChange(index, "marca", e.target.value)
             }
-            className="border p-2 rounded"
+            className="border p-2 rounded w-full"
           />
 
           <input
@@ -321,7 +333,7 @@ const handleSubmit = (e: React.FormEvent) => {
             onChange={(e) =>
               handleInventarioChange(index, "modelo", e.target.value)
             }
-            className="border p-2 rounded"
+            className="border p-2 rounded w-full"
           />
 
           <input
@@ -331,7 +343,7 @@ const handleSubmit = (e: React.FormEvent) => {
             onChange={(e) =>
               handleInventarioChange(index, "patrimonio", e.target.value)
             }
-            className="border p-2 rounded"
+            className="border p-2 rounded w-full"
           />
 
           <textarea
@@ -340,28 +352,24 @@ const handleSubmit = (e: React.FormEvent) => {
             onChange={(e) =>
               handleInventarioChange(index, "observaciones", e.target.value)
             }
-            className="border p-2 rounded"
+            className="border p-2 rounded w-full"
           />
-
-          <button
-            type="button"
-            onClick={() => eliminarItemInventario(index)}
-            className="bg-red-500 text-white p-2 rounded"
-          >
-            Eliminar Item
-          </button>
         </div>
-      ))}
+      )}
+    </div>
+  );
+})}
+
 
       <button
         type="button"
-        onClick={agregarItemInventario}
-        className="bg-blue-600 text-white p-2 rounded"
+        onClick={() => setShowCatalogoSelector(true)}
+        className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded transition-colors"
       >
         + Agregar Item
       </button>
 
-      {/* Botones */}
+
       <div className="flex gap-2 mt-3">
         <button type="submit" className="flex-1 bg-green-600 text-white p-2 rounded">
           Guardar
@@ -375,19 +383,41 @@ const handleSubmit = (e: React.FormEvent) => {
         </button>
       </div>
     </form>
-     {/* Footer fijo */}
-  <div className="fixed bottom-0 left-0 w-full bg-white p-4 shadow-md flex gap-2">
-    <button type="submit" form="espacioForm" className="flex-1 bg-green-600 text-white p-2 rounded">
-      Guardar
-    </button>
-    <button
-      type="button"
-      onClick={onCancel}
-      className="flex-1 bg-gray-400 p-2 rounded"
-    >
-      Cancelar
-    </button>
-  </div>
+
+    {showCatalogoSelector && (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+          <h3 className="text-xl font-bold text-morado mb-4">
+            Selecciona un elemento del catálogo
+          </h3>
+      
+      <div className="max-h-96 overflow-y-auto space-y-2">
+        {catalogo.map((item) => (
+          <button
+            key={item.catalogo_id}
+            type="button"
+            onClick={() => agregarItemInventario(item)}
+            className="w-full text-left p-3 border-2 border-gray-200 rounded-lg hover:border-morado hover:bg-purple-50 transition-colors"
+          >
+            <div className="font-semibold text-morado">
+              {item.nombre_elemento}
+            </div>
+            <div className="text-sm text-gray-600">
+              Tipo: {item.tipo}
+            </div>
+          </button>
+      ))}
+      </div>
+
+         <button
+        type="button"
+        onClick={() => setShowCatalogoSelector(false)}
+        className="mt-4 w-full bg-gray-400 hover:bg-gray-500 text-white p-2 rounded transition-colors"
+      >
+        Cancelar
+      </button>
     </div>
-  );
-}
+  </div>
+)}
+</div>
+)}

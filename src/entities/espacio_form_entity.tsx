@@ -1,3 +1,5 @@
+import type { CatalogoElementoEntity } from "./catalogo_elemento_entity";
+
 export interface InventarioFormItem {
   catalogo_id: number;
   cantidad: number;
@@ -5,6 +7,7 @@ export interface InventarioFormItem {
   modelo: string;
   patrimonio: string;
   observaciones: string;
+  catalogo_elemento?: CatalogoElementoEntity
 }
 
 export interface EspacioFormData {

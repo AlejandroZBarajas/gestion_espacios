@@ -7,13 +7,18 @@ interface MateriaCardProps {
 }
 
 export default function MateriaCard({ materia, onEdit, onDelete }: MateriaCardProps) {
+
   return (
-    <div className="bg-white rounded-2xl shadow p-4 flex justify-between items-center">
-      <div>
-        <h3 className="text-lg font-bold">{materia.nombre}</h3>
+    <div className="bg-white border-morado border-[.1px] rounded-2xl shadow-2xl p-2 m-4  flex flex-col justify-left">
+      <div className="flex flex-col ">
+
+
+        <h3 className=" font-bold text-2xl">{materia.nombre}</h3>
         <p className="text-sm text-gray-600">
-          Código: {materia.codigo_materia} | Nivel: {materia.nivel} | Plan: {materia.plan_id}
+          Código: {materia.codigo_materia}  
         </p>
+        <p>Cuatrimestre: {materia.nivel}</p>
+        <p>Plan: {materia.plan?.nombre_carrera}</p>
       </div>
       <div className="flex gap-2">
         <button

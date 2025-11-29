@@ -23,6 +23,7 @@ export default function PeriodosPage() {
   const fetchPeriodos = async () => {
     try {
       const data = await getPeriodos();
+      console.log("periodos:   ",data)
       setPeriodos(data);
     } catch (error) {
       console.error("Error cargando periodos", error);

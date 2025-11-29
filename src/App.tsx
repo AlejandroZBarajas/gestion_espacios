@@ -18,7 +18,7 @@ import MisReportesPage from "./docente/pages/mis_reportes_page";
 
 export default function App() {
   const userRole = getCookie("rol");
-  console.log(userRole)
+
   return (
     <Routes>
       <Route path="/" element={<Login />} />

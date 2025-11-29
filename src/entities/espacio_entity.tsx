@@ -1,10 +1,4 @@
-export interface CatalogoElementoEntity {
-  catalogo_id: number;
-  nombre_elemento: string;
-  tipo: string;
-  descripcion: string | null;
-  fecha_creacion: string;
-}
+import type { CatalogoElementoEntity } from "./catalogo_elemento_entity";
 
 export interface InventarioEntity {
   inventario_id: number;
@@ -28,7 +22,7 @@ export default interface EspacioEntity {
   tipo_id: number;
   tipo?: string;
   capacidad: number;
-  descripcion: string;
+  descripcion: string 
   disponible: boolean;
   ubicacion_id: number;
   ubicacion?: string;

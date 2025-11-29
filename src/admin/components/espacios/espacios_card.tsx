@@ -9,13 +9,17 @@ interface Props {
 
 export default function EspacioCard({ espacio, onEdit, onDelete }: Props) {
   return (
-    <div className="border border-morado rounded-lg shadow-md p-4 flex flex-col gap-2">
+    <div className="border border-morado rounded-lg shadow-md m-4 p-4 flex flex-col gap-2">
       <h3 className="text-xl font-bold text-morado">{espacio.nombre}</h3>
 
-      <p className="text-sm"><strong>Tipo ID:</strong> {espacio.tipo}</p>
-      <p className="text-sm"><strong>Ubicación ID:</strong> {espacio.ubicacion}</p>
+      <p className="text-sm"><strong>Categoría: </strong> {espacio.tipo}</p>
+      <p className="text-sm"><strong>Edificio:</strong> {espacio.ubicacion}</p>
       <p className="text-sm"><strong>Capacidad:</strong> {espacio.capacidad}</p>
-      <p className="text-gray-600">{espacio.descripcion}</p>
+      {
+        espacio.descripcion && (
+          <p className="text-gray-600">{espacio.descripcion}</p>
+        )
+      }
 
       <p
         className={`text-sm font-bold ${
@@ -25,7 +29,6 @@ export default function EspacioCard({ espacio, onEdit, onDelete }: Props) {
         {espacio.disponible ? "Disponible" : "No disponible"}
       </p>
 
-      {/* Inventario */}
       <h4 className="text-md font-semibold mt-3">Inventario:</h4>
 
       {espacio.inventarios.length === 0 && (

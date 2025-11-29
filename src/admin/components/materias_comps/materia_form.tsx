@@ -18,7 +18,6 @@ export default function MateriaForm({ onSubmit, initialData }: MateriaFormProps)
   });
 
   useEffect(() => {
-    // cargar planes desde el servicio
     getPlanes()
       .then((data) => setPlanes(data))
       .catch((err) => console.error("Error cargando planes", err));
@@ -35,6 +34,7 @@ export default function MateriaForm({ onSubmit, initialData }: MateriaFormProps)
   ) => {
     const { name, value } = e.target;
     setFormData({
+
       ...formData,
       [name]:
         name === "nivel" || name === "plan_id" ? Number(value) : value,

@@ -45,3 +45,11 @@ export const deletePeriodo = async (id: number): Promise<void> => {
   });
   if (!res.ok) throw new Error("Error al eliminar periodo");
 };
+
+export const cambiarStatusPeriodo = async (id: number): Promise<void> => {
+    const res = await fetch(`${API_URL}/status/${id}`, {
+    method: "POST",
+    credentials: "include", 
+  });
+  if (!res.ok) throw new Error("Error al eliminar periodo");
+}
