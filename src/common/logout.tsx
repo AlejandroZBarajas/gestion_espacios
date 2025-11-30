@@ -12,13 +12,14 @@
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.message || "Error al iniciar sesión");
+        await new Promise(resolve => setTimeout(resolve, 100));
+        throw new Error(data.message || "Error al cerrar sesión");
       }     
     } catch (err: unknown) {
       if (err instanceof Error) {
-console.log(err)
+        console.log(err)
       } else {
-        console.log("Error desconocido al iniciar sesión");
+        console.log("Error desconocido al cerrar sesión");
       }
     }
   }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import EspacioCard from "../components/espacios/espacios_card";
 import EspacioForm from "../components/espacios/espacios_form";
 import type EspacioEntity from "../../entities/espacio_entity";
+
 import type { UpdateEspacioDTO } from "../../entities/update_espacio_DTO";
 import { MdAdd } from "react-icons/md";
 import Header from "../components/common/header";
@@ -12,10 +13,14 @@ import {
   deleteEspacio,
 } from "../../servicios/espacios_service";
 
+
 export default function EspaciosPage() {
   const [espacios, setEspacios] = useState<EspacioEntity[]>([]);
+
   const [modalAbierto, setModalAbierto] = useState(false);
   const [espacioEditando, setEspacioEditando] = useState<EspacioEntity | null>(null);
+
+
 
   const fetchEspacios = async () => {
     try {
@@ -28,6 +33,7 @@ export default function EspaciosPage() {
 
   useEffect(() => {
     fetchEspacios();
+
   }, []);
 
   const handleSave = async (payload: UpdateEspacioDTO) => {
@@ -35,10 +41,9 @@ export default function EspaciosPage() {
       if (espacioEditando) {
         await updateEspacio(espacioEditando.espacio_id!, payload);
       } else {
-        await createEspacio(payload); // También actualiza createEspacio si es necesario
+        await createEspacio(payload); 
       }
       
-      // ✅ Recarga la lista completa después de guardar
       await fetchEspacios();
       
       setModalAbierto(false);

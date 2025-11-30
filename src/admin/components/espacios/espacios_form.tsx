@@ -6,6 +6,8 @@ import type { EspacioFormData, InventarioFormItem } from "../../../entities/espa
 import { getUbicaciones } from "../../../servicios/ubicaciones_service";
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import type { UpdateEspacioDTO } from "../../../entities/update_espacio_DTO";
+import type TipoEspacioEntity from "../../../entities/tipo_espacio_entity";
+import { getTiposEspacios } from "../../../servicios/tipo_espacio_service";
 import { getCatalogo } from "../../../servicios/catalogo_service";
 
 interface Props {
@@ -16,6 +18,7 @@ interface Props {
 
 export default function EspacioForm({ espacio, onSave, onCancel }: Props) {
 
+const [tiposEspacios, setTiposEspacios] = useState<TipoEspacioEntity[]>([]);
 const [showCatalogoSelector, setShowCatalogoSelector] = useState(false);
 const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
 
@@ -29,6 +32,15 @@ const toggleCard = (index: number) => {
     }
     return newSet;
   });
+}
+
+const fetchTiposEspacios = async () => {
+  try{
+    const data = await getTiposEspacios()
+    setTiposEspacios(data)
+  } catch (error){
+    console.error(error)
+  }
 }
 
   const [formData, setFormData] = useState<EspacioFormData>(() => {
@@ -79,6 +91,7 @@ const toggleCard = (index: number) => {
       }
     };
     fetchUbicaciones();
+    fetchTiposEspacios()
   }, []);
 
 
@@ -205,15 +218,21 @@ const handleSubmit = (e: React.FormEvent) => {
         required
       />
 
-      <label>Categoría</label>
-      <input
-        type="number"
+    <label>Categoría</label>
+      <select
         name="tipoId"
         className="border p-2 rounded"
         value={formData.tipoId}
         onChange={handleChange}
         required
-      />
+      >
+        <option value="">Selecciona una categoría</option>
+        {tiposEspacios.map((tipo) => (
+          <option key={tipo.tipo_id} value={tipo.tipo_id}>
+            {tipo.nombre}
+          </option>
+        ))}
+      </select>
 
       <label>Ubicación</label>
       <select

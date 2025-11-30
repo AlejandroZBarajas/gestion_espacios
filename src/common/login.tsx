@@ -25,7 +25,7 @@ export default function Login() {
         const data = await res.json();
         throw new Error(data.message || "Error al iniciar sesión");
       }
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 800));
       const rol = getCookie("rol")
        if (rol === "administrador") {
         navigate("/usuarios");
