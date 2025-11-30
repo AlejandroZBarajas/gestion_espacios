@@ -32,14 +32,12 @@ const handleCreateOrUpdate = async (
   data: Omit<ReporteEntity, "reporte_id" | "usuario_id">
 ) => {
   try {
-    // SI ESTÁ EDITANDO
     if (editItem) {
       const actualizado = await updateReporte(editItem.reporte_id!, {
         usuario_id: usuarioId,
         ...data,
       });
 
-      // actualizar en estado local
       setMisReportes((prev) =>
         prev.map((r) =>
           r.reporte_id === editItem.reporte_id ? actualizado : r
@@ -51,7 +49,6 @@ const handleCreateOrUpdate = async (
       return;
     }
 
-    // SI ES CREACIÓN
     const nuevo = await createReporte({
       usuario_id: usuarioId,
       ...data,

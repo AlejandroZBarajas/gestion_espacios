@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "./cookie";
+//import { Logout } from "./logout";
 
 export default function Login() {
+
+  //const resetCookies
+
+
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [contrasena, setContrasena] = useState("");

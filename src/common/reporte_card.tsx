@@ -12,8 +12,6 @@ const rol = getCookie("rol");
 
 export default function ReporteCard({ reporte, onEdit, changeStatus, onDelete }: Props) {
 
-  console.log("reporte recibido", reporte)
-  console.log("rol: ",rol)
   return (
     <div className="w-full bg-gray-100 shadow-md rounded-2xl border p-4 hover:shadow-lg transition">
       <p className="text-morado mb-3">{reporte.descripcion}</p>

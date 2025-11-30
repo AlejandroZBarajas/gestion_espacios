@@ -22,4 +22,5 @@
         console.log("Error desconocido al cerrar sesión");
       }
     }
+              window.location.reload();
   }

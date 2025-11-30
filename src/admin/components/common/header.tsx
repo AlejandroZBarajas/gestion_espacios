@@ -36,6 +36,7 @@ export default function Header(){
   
     function byebye(){
         Logout()
+
         navigate("/")
     }
 
