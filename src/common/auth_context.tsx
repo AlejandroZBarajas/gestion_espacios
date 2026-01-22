@@ -18,12 +18,10 @@ export interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Exportar el contexto para useAuth
 export { AuthContext };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserData>(() => {
-    // Inicializar el estado con los datos de las cookies al cargar
     return {
       id: getCookie("id") || undefined,
       nombre: getCookie("nombre") || undefined,
@@ -32,7 +30,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   });
 
-  // Actualizar el estado cuando cambien las cookies
   useEffect(() => {
     const interval = setInterval(() => {
       const rolActual = getCookie("rol");

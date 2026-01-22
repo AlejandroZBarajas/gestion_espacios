@@ -1,8 +1,10 @@
-// src/servicios/solicitudes_service.ts
 import type SolicitudEntity from "../entities/solicitud_entity";
+import type SolicitudEspecialEntity from "../entities/solicitud_esp_entity";
 import type SolicitudPendienteEntity from "../entities/solicitud_pendiente_entity";
+import type SolicitudEspecialDTO from "../entities/solicitud_especial_DTO";
 
 const API_URL = import.meta.env.VITE_API_URL + "solicitudes";
+const API_ESPECIALES = import.meta.env.VITE_API_URL +"solicitud_especial/"
 
 export const createSolicitud = async (
   solicitud: SolicitudEntity
@@ -51,5 +53,58 @@ export async function verMisSolicitudes(user_id: number): Promise<SolicitudPendi
     credentials: "include",
   });
   if (!response.ok) throw new Error("Error al obtener solicitudes");
+  return response.json();
+}
+
+export async function createSolicitudEspecial(solicitud: SolicitudEspecialEntity): Promise <{code: number; description: string}>{
+  const response = await fetch(`${API_ESPECIALES}`,{
+    method: "POST",
+    credentials:"include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(solicitud),
+  })
+  if (!response.ok) throw new Error("Error al obtener solicitudes");
+    return response.json();
+}
+
+export async function getMysolicitudesEspeciales(usuario_id:number):Promise <SolicitudEspecialDTO[]>{
+  const response = await fetch(`${API_ESPECIALES}usuario/${usuario_id}/`,{
+    method: "GET",
+    credentials:"include",
+    headers: { "Content-Type": "application/json" },
+
+  })
+  if (!response.ok) throw new Error("Error al obtener solicitudes");
+  return response.json();
+}
+
+export async function getEspecialesPendientes(): Promise <SolicitudEspecialDTO[]>{
+  const response  = await fetch(`${API_ESPECIALES}pen-rec`,{
+    method: "GET",
+    credentials:"include",
+    headers: { "Content-Type": "application/json" },
+  })
+    if (!response.ok) throw new Error("Error al obtener solicitudes");
+  return response.json();
+}
+
+export async function aceptarSolicitudEspecial(id:number):Promise<void>{
+  const response = await fetch(`${API_ESPECIALES}aprobar/${id}`,{
+    method:"POST",
+    credentials:"include",
+  })
+  if (!response.ok) throw new Error("Error al obtener solicitudes");
+  console.log(response)
+  return response.json();
+}
+
+export async function rechazarSolicitudEspecial(id:number):Promise<void>{
+  const response = await fetch(`${API_ESPECIALES}rechazar/${id}`,{
+    method:"POST",
+    credentials:"include",
+  })
+  if (!response.ok) throw new Error("Error al obtener solicitudes");
+  console.log(response)
+  
   return response.json();
 }

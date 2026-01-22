@@ -1,16 +1,22 @@
 import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
 import Header from "../components/common/header";
-import SolicitudCard from "../components/solicitudes/solicitudes_card";
+import SolicitudCard from '../components/solicitudes/solicitudes_card';
+import SolicitudEspecialCard from '../components/solicitudes/solicitud_especial_card';
 import { 
   getSolicitudesPendientes, 
+  aceptarSolicitudEspecial,
   aceptarSolicitud, 
-  rechazarSolicitud 
+  rechazarSolicitudEspecial,
+  rechazarSolicitud,
+  getEspecialesPendientes 
 } from "../../servicios/solicitudes_service";
 import type SolicitudPendienteEntity from "../../entities/solicitud_pendiente_entity";
+import type SolicitudEspecialDTO from '../../entities/solicitud_especial_DTO';
 
 export default function Solicitudes() {
   const [solicitudes, setSolicitudes] = useState<SolicitudPendienteEntity[]>([]);
+  const [solicitudesEspeciales, setSolicitudesEspeciales] = useState<SolicitudEspecialDTO[]>([])
   const [loading, setLoading] = useState(true);
 
   const id = Cookies.get("id");
@@ -33,16 +39,44 @@ export default function Solicitudes() {
     fetchSolicitudes();
   }, []);
 
+    useEffect(() => {
+    const fetchSolicitudesEspeciales = async () => {
+      try {
+        const data = await getEspecialesPendientes();
+        setSolicitudesEspeciales(data);
+      } catch (err) {
+        console.error("Error al cargar solicitudes:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSolicitudesEspeciales();
+  }, []);
+
   const handleAceptar = async (solicitud_id: number) => {
     console.log(solicitud_id)
     try {
-      
-      console.log(user_id)
       await aceptarSolicitud(solicitud_id, user_id);
 
       setSolicitudes((prev) =>
         prev.map((s) =>
           s.solicitud_id === solicitud_id ? { ...s, estado: "aprobada" } : s
+        )
+      );
+    } catch (err) {
+      console.error("Error al aceptar solicitud:", err);
+    }
+  };
+
+    const handleAceptarEspecial = async (solicitud_id: number) => {
+    console.log(solicitud_id)
+    try {
+      await aceptarSolicitudEspecial(solicitud_id);
+
+      setSolicitudesEspeciales((prev) =>
+        prev.map((s) =>
+          s.solicitud_especial_id === solicitud_id ? { ...s, estado: "aprobada" } : s
         )
       );
     } catch (err) {
@@ -64,6 +98,18 @@ export default function Solicitudes() {
     }
   };
 
+    const handleRechazarEspecial = async (solicitud_id: number) => {
+    try {
+      await rechazarSolicitudEspecial(solicitud_id);
+      setSolicitudesEspeciales((prev) =>
+        prev.map((s) =>
+          s.solicitud_especial_id === solicitud_id ? { ...s, estado: "rechazada" } : s
+        )
+      );
+    } catch (err) {
+      console.error("Error al rechazar solicitud:", err);
+    }
+  };
   return (
     <div>
       <Header />
@@ -72,18 +118,42 @@ export default function Solicitudes() {
         <h2 className="text-morado font-black text-4xl">Solicitudes</h2>
       </div>
 
-      {loading ? (
-        <p className="text-center text-gray-600">Cargando solicitudes...</p>
-      ) : solicitudes.length === 0 ? (
-        <p className="text-center text-gray-600">No hay solicitudes pendientes.</p>
-      ) : (
-        <div className="flex flex-col items-center gap-6">
+        {loading ? (
+          <p className="text-center text-gray-600">Cargando solicitudes...</p>
+        ) : solicitudes.length === 0 ? (
+          <p className="text-center text-gray-600">No hay solicitudes pendientes.</p>
+        ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
           {solicitudes.map((solicitud) => (
             <SolicitudCard
               key={solicitud.solicitud_id}
               solicitud={solicitud}
               onAceptar={handleAceptar}
               onRechazar={handleRechazar}
+              editable={rol === "administrador"}
+            />
+          ))}
+        </div>
+      )}
+
+      <div className="w-full h-[100px] flex flex-col justify-center items-center">
+        <h2 className="text-morado font-black text-4xl">Solicitudes especiales</h2>
+      </div>
+
+        {loading ? (
+          <p className="text-center text-gray-600">Cargando solicitudes...</p>
+        ) : solicitudesEspeciales.length === 0 ? (
+          <p className="text-center text-gray-600">No hay solicitudes pendientes.</p>
+        ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          {solicitudesEspeciales.map((solicitud) => (
+            <SolicitudEspecialCard
+              key={solicitud.solicitud_especial_id}
+              solicitud={solicitud}
+              onAceptar={handleAceptarEspecial}
+              onRechazar={handleRechazarEspecial}
               editable={rol === "administrador"}
             />
           ))}

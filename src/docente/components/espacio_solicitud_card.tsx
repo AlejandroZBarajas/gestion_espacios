@@ -3,9 +3,10 @@ import type EspacioEntity from "../../entities/espacio_entity";
 interface Props {
   espacio: EspacioEntity;
   onSolicitar: (espacio: EspacioEntity) => void;
+  onSolicitarEspecial:(espacio: EspacioEntity) => void
 }
 
-export default function EspacioSolicitudCard({ espacio, onSolicitar }: Props) {
+export default function EspacioSolicitudCard({ espacio, onSolicitar, onSolicitarEspecial }: Props) {
 
   return (
     <div className="border p-4 rounded-lg shadow hover:shadow-lg transition flex flex-col justify-between">
@@ -19,7 +20,13 @@ export default function EspacioSolicitudCard({ espacio, onSolicitar }: Props) {
         onClick={() => onSolicitar(espacio)}
         className="bg-morado text-white py-2 px-4 rounded mt-4 hover:bg-morado-dark"
       >
-        Solicitar
+        Solicitar para clase
+      </button>
+       <button
+        onClick={() => onSolicitarEspecial(espacio)}
+        className="bg-moradito text-morado py-2 px-4 rounded mt-4 hover:bg-morado-dark"
+      >
+        Solicitar para evento
       </button>
     </div>
   );

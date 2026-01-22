@@ -74,21 +74,6 @@ export default function SolicitudForm({
         ))}
       </select>
 
-
-
-
-
-
-
-{/* ARREGLAR EL DISPLAY DE PERIODOS
-
-
-
-
-
-
-
-*/}
       <h2 className="text-morado">Periodo</h2>
       <select
         name="periodo_id"
