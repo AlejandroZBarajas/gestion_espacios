@@ -37,7 +37,7 @@ export default function PeriodosPage() {
   const handleSave = async (nuevo: PeriodoEntity) => {
     try {
       if (periodoEditando) {
-        const actualizado = await updatePeriodo(periodoEditando.periodo_id!, nuevo);
+        const actualizado = await updatePeriodo(nuevo);
         setPeriodos(
           periodos.map((p) =>
             p.periodo_id === periodoEditando.periodo_id ? actualizado : p
@@ -105,7 +105,6 @@ export default function PeriodosPage() {
         <MdAdd size={28} />
       </button>
 
-      {/* Modal */}
       {modalAbierto && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">

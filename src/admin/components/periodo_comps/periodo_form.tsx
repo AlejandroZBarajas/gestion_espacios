@@ -14,10 +14,10 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
     periodo || {
       fecha_inicio: "",
       fecha_fin: "",
-      tipo_periodo: "Enero-Abril",
-      activo: true,
+      activo:false
     }
   );
+  const [error, setError] = useState<string>("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -35,8 +35,26 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
  const handleSubmit = (e: React.FormEvent) => {
   
   e.preventDefault();
+
+  if (!validateDates(formData.fecha_inicio, formData.fecha_fin)) {
+      return;
+    }
   onSave(formData);
 };
+
+  const validateDates = (inicio: string, fin: string) => {
+    if (inicio && fin) {
+      const fechaInicio = new Date(inicio);
+      const fechaFin = new Date(fin);
+
+      if (fechaFin <= fechaInicio) {
+        setError("La fecha de cierre debe ser posterior a la fecha de inicio");
+        return false;
+      }
+    }
+    setError(error);
+    return true;
+  };
 
 
   return (
@@ -66,18 +84,6 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
         required
       />
 
-      <h3>Periodo</h3>
-      <select
-        name="tipo_periodo"
-        value={formData.tipo_periodo}
-        onChange={handleChange}
-        className="border p-2 rounded border-morado"
-      >
-        <option value="Enero-Abril">Enero-Abril</option>
-        <option value="Mayo-Agosto">Mayo-Agosto</option>
-        <option value="Septiembre-Diciembre">Septiembre-Diciembre</option>
-      </select>
-
       <label className="flex items-center gap-2">
         <input
           type="checkbox"
@@ -89,9 +95,16 @@ export default function PeriodoForm({ periodo, onSave, onCancel }: Props) {
       </label> 
 
       <div className="flex gap-2">
-        <button type="submit" className="flex-1 bg-verde text-white p-2 rounded">
+       
+        
+        <button
+          type="submit"
+          disabled={!!error}
+          className="flex-1 bg-verde text-white p-2 rounded font-semibold hover:bg-verde/90 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+        >
           Guardar
         </button>
+
         <button
           type="button"
           onClick={onCancel}

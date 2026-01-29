@@ -23,17 +23,28 @@ export const createPeriodo = async (periodo: PeriodoEntity): Promise<PeriodoEnti
   return res.json();
 };
 
-export const updatePeriodo = async (id: number, periodo: PeriodoEntity): Promise<PeriodoEntity> => {
-  console.log("entra a edicion en el servicio")
-  console.log("periodo_id: ", id)
-  console.log("periodo: ",periodo)
-  const res = await fetch(`${API_URL}/${id}`, {
+export const updatePeriodo = async (periodo: PeriodoEntity): Promise<PeriodoEntity> => {
+  // Convertir las fechas a formato ISO completo
+  const body = {
+    fecha_inicio: new Date(periodo.fecha_inicio).toISOString(),
+    fecha_fin: new Date(periodo.fecha_fin).toISOString()
+  };
+  
+  console.log("Body a enviar:", body);
+  
+  const res = await fetch(`${API_URL}/${periodo.periodo_id}`, {
     method: "PUT",
     credentials: "include", 
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(periodo),
+    body: JSON.stringify(body),
   });
-  if (!res.ok) throw new Error("Error al actualizar periodo");
+  
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error("Error del servidor:", errorText);
+    throw new Error("Error al actualizar periodo");
+  }
+  
   return res.json();
 };
 
@@ -46,10 +57,19 @@ export const deletePeriodo = async (id: number): Promise<void> => {
   if (!res.ok) throw new Error("Error al eliminar periodo");
 };
 
-export const cambiarStatusPeriodo = async (id: number): Promise<void> => {
-    const res = await fetch(`${API_URL}/status/${id}`, {
-    method: "POST",
+
+
+export const activarPeriodo = async (id: number):Promise<void> =>{
+    const res = await fetch(`${API_URL}/${id}/activar`, {
+      method:"PUT",
     credentials: "include", 
-  });
-  if (!res.ok) throw new Error("Error al eliminar periodo");
+    })
+  if (!res.ok) throw new Error("Error al ACTIVAR periodo");
+}
+export const desactivarPeriodo = async (id: number):Promise<void> =>{
+    const res = await fetch(`${API_URL}/${id}/desactivar`, {
+      method:"PUT",
+    credentials: "include", 
+    })
+  if (!res.ok) throw new Error("Error al ACTIVAR periodo");
 }

@@ -7,12 +7,18 @@ import Header from "../components/common/header";
 export default function ReportesPendientesPage() {
   const [reportes, setReportes] = useState<ReporteEntity[]>([]);
   const [error, setError] = useState<string | null>(null);
-
+  
   useEffect(() => {
     async function fetchReportes() {
       try {
         const data = await getReportesPendientes();
-        setReportes(data);
+        data.forEach(d => {
+          d.usuario=`${d.nombre} ${d.apellido} ${d.apellido2}`
+          console.log("usuario: ",d.usuario)
+          setReportes(data);
+          
+        });
+        console.log(data)
       } catch (err) {
         console.error(err);
         setError("Error al cargar reportes pendientes");
@@ -23,12 +29,10 @@ export default function ReportesPendientesPage() {
 
   const handleVer = (id: number) => {
     console.log("Ver reporte", id);
-    // aquí puedes abrir un modal con el detalle
   };
 
   const handleChangeStatus = (id: number) => {
     console.log("Cambiar estado del reporte", id);
-    // aquí llamas al servicio que cambie el estado
   };
 
   return (
@@ -38,7 +42,7 @@ export default function ReportesPendientesPage() {
 
       {error && <p className="text-red-500">{error}</p>}
 
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 m-8">
         {reportes.length > 0 ? (
           reportes.map((r) => (
             <ReporteCard
