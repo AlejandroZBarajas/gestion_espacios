@@ -20,7 +20,7 @@ export const createSolicitud = async (
 };
 
 export async function getSolicitudesPendientes(): Promise<SolicitudPendienteEntity[]> {
-  const response = await fetch(`${API_URL}/pend-rech`, {
+  const response = await fetch(`${API_URL}/`, {
     credentials: "include",
     method: "GET",
   });
