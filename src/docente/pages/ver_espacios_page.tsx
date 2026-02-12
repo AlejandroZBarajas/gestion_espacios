@@ -2,7 +2,7 @@ import { useState, useEffect/* , useSyncExternalStore */ } from "react";
 import HeaderDocente from "../components/header_docente";
 import { getEspacios } from "../../servicios/espacios_service";
 import { getMaterias } from "../../servicios/materias_service";
-import { getPeriodos } from "../../servicios/periodos_service";
+import { getPeriodoActivo } from "../../servicios/periodos_service";
 import { createSolicitud, createSolicitudEspecial } from "../../servicios/solicitudes_service";
 import type EspacioEntity from "../../entities/espacio_entity";
 import type { MateriaEntity } from "../../entities/materia_entity";
@@ -17,28 +17,31 @@ import { getCookie } from "../../common/cookie";
 export default function VerEspaciosPage() {
   const [espacios, setEspacios] = useState<EspacioEntity[]>([]);
   const [materias, setMaterias] = useState<MateriaEntity[]>([]);
-  const [periodos, setPeriodos] = useState<PeriodoEntity[]>([]);
+  const [periodo, setPeriodo] = useState<PeriodoEntity  >();
   const [espacioSeleccionado, setEspacioSeleccionado] = useState<EspacioEntity | null>(null);
   const [espacioEspecialSeleccionado, setEspacioEspecialSeleccionado] = useState<EspacioEntity | null >(null)
 
   const [capacidadFiltro, setCapacidadFiltro] = useState<string>("");
+  
+  const [modalMensaje, setModalMensaje] = useState<{ mensaje: string; tipo: 'exito' | 'error' } | null>(null);
 
   const usuarioId = Number(getCookie("id"));
   
   useEffect(() => {
     getEspacios().then(setEspacios);
     getMaterias().then(setMaterias);
-    getPeriodos().then(setPeriodos);
+    getPeriodoActivo().then(setPeriodo);
   }, []);
 
   const handleSolicitud = async (solicitud: SolicitudEntity) => {
+    console.log(solicitud)
     try {
       await createSolicitud(solicitud);
       setEspacioSeleccionado(null);
-      alert("Solicitud enviada");
+      setModalMensaje({ mensaje: "Solicitud enviada", tipo: 'exito' });
     } catch (error) {
       console.error(error);
-      alert("Error al enviar la solicitud");
+      setModalMensaje({ mensaje: "Error al enviar la solicitud", tipo: 'error' });
     }
   };
 
@@ -46,10 +49,10 @@ export default function VerEspaciosPage() {
     try{
       await createSolicitudEspecial(solicitudEspecial)
       setEspacioEspecialSeleccionado(null)
-      alert("solicitud especial enviada")
+      setModalMensaje({ mensaje: "Solicitud especial enviada", tipo: 'exito' });
     }catch(error){
       console.error(error)
-      alert("error al solicitar")
+      setModalMensaje({ mensaje: "Error al solicitar", tipo: 'error' });
     }
   }
 
@@ -111,7 +114,7 @@ export default function VerEspaciosPage() {
         ))}
       </div>
 
-      {/* MODAL */}
+      {/* MODAL DE SOLICITUD */}
       {espacioSeleccionado && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
           <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg">
@@ -119,13 +122,15 @@ export default function VerEspaciosPage() {
               usuarioId={usuarioId}
               espacioId={espacioSeleccionado.espacio_id!}
               materias={materias}
-              periodos={periodos}
+              periodoId={periodo?.periodo_id ?? 0 }
               onSubmit={handleSolicitud}
               onCancel={() => setEspacioSeleccionado(null)}
             />
           </div>
         </div>
       )}
+
+      {/* MODAL DE SOLICITUD ESPECIAL */}
       {espacioEspecialSeleccionado && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
           <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg">
@@ -139,6 +144,37 @@ export default function VerEspaciosPage() {
         </div>
       )}
 
+      {/* MODAL DE MENSAJE */}
+      {modalMensaje && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
+          onClick={() => setModalMensaje(null)}
+        >
+          <div 
+            className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-center">
+              <div className={`text-5xl mb-4 ${modalMensaje.tipo === 'exito' ? 'text-green-500' : 'text-red-500'}`}>
+                {modalMensaje.tipo === 'exito' ? '✓' : '✕'}
+              </div>
+              <p className="text-lg font-medium text-gray-800 mb-6">
+                {modalMensaje.mensaje}
+              </p>
+              <button
+                onClick={() => setModalMensaje(null)}
+                className={`px-6 py-2 rounded font-medium text-white ${
+                  modalMensaje.tipo === 'exito' 
+                    ? 'bg-green-500 hover:bg-green-600' 
+                    : 'bg-red-500 hover:bg-red-600'
+                } transition-colors`}
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

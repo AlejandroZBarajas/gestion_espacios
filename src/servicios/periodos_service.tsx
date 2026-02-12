@@ -11,6 +11,16 @@ export const getPeriodos = async (): Promise<PeriodoEntity[]> => {
   return res.json();
 };
 
+export const getPeriodoActivo = async (): Promise<PeriodoEntity> => {
+
+  const res = await fetch(`${API_URL}/activo`,{
+    credentials: "include", 
+  });
+  console.log("respuesta de getPeriodoActivo: ",res)
+  if (!res.ok) throw new Error("Error al obtener periodo activo");
+  return res.json();
+};
+
 export const createPeriodo = async (periodo: PeriodoEntity): Promise<PeriodoEntity> => {
   console.log("periodo recibido en servicio: ",periodo)
   const res = await fetch(API_URL, {

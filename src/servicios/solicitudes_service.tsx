@@ -9,6 +9,7 @@ const API_ESPECIALES = import.meta.env.VITE_API_URL +"solicitud_especial/"
 export const createSolicitud = async (
   solicitud: SolicitudEntity
 ): Promise<SolicitudEntity> => {
+  console.log("solicitud normal enviada: ", solicitud)
   const res = await fetch(`${API_URL}/normal`, {
     method: "POST",
     credentials: "include",

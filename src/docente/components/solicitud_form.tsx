@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type SolicitudEntity from "../../entities/solicitud_entity";
 import type { MateriaEntity } from "../../entities/materia_entity";
-import type { PeriodoEntity } from "../../entities/periodo";
+
 
 interface Props {
   usuarioId: number;
   espacioId: number;
   materias: MateriaEntity[];
-  periodos: PeriodoEntity[];
+  periodoId: number ;
   onSubmit: (solicitud: SolicitudEntity) => void;
   onCancel: () => void;
 }
@@ -16,14 +16,14 @@ export default function SolicitudForm({
   usuarioId,
   espacioId,
   materias,
-  periodos,
+  periodoId,
   onSubmit,
   onCancel,
 }: Props) {
   const [formData, setFormData] = useState<SolicitudEntity>({
     usuario_id: usuarioId,
     espacio_id: espacioId,
-    periodo_id: 0,
+    periodo_id: periodoId,
     materia_id: 0,
     grupo: "",
     motivo: "",
@@ -32,6 +32,10 @@ export default function SolicitudForm({
     hora_inicio: "",
     hora_fin: "",
   });
+
+    useEffect(() => {
+      console.log("periodo_id: ",periodoId)
+    }, []);
 
  const handleSubmit = (e: React.FormEvent) => {
   e.preventDefault();
@@ -74,23 +78,8 @@ export default function SolicitudForm({
         ))}
       </select>
 
-      <h2 className="text-morado">Periodo</h2>
-      <select
-        name="periodo_id"
-        value={formData.periodo_id}
-        onChange={(e) =>
-          setFormData({ ...formData, periodo_id: Number(e.target.value) })
-        }
-        required
-        className="border p-2 rounded border-morado"
-      >
-        <option value={0}>Selecciona un periodo</option>
-        {periodos.map((p) => (
-          <option key={p.periodo_id} value={p.periodo_id}>
-            {p.fecha_inicio} - {p.fecha_fin}
-          </option>
-        ))}
-      </select>
+
+   
       <h2 className="text-morado">Grupo</h2>
       <input
         type="text"
