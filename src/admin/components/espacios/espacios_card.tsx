@@ -1,5 +1,7 @@
 import { MdEdit, MdDelete } from "react-icons/md";
+import { useState } from "react";
 import type EspacioEntity from "../../../entities/espacio_entity";
+import EspacioModalInventario from "./espacio_modal_invenrtario";
 
 interface Props {
   espacio: EspacioEntity;
@@ -8,6 +10,7 @@ interface Props {
 }
 
 export default function EspacioCard({ espacio, onEdit, onDelete }: Props) {
+   const [showModal, setShowModal] = useState(false);
   return (
     <div className="border border-morado rounded-lg shadow-md m-4 p-4 flex flex-col gap-2">
       <h3 className="text-xl font-bold text-morado">{espacio.nombre}</h3>
@@ -30,7 +33,7 @@ export default function EspacioCard({ espacio, onEdit, onDelete }: Props) {
       </p>
 
       <h4 className="text-md font-semibold mt-3">Inventario:</h4>
-
+{/* 
       {espacio.inventarios.length === 0 && (
         <p className="text-sm text-gray-500">Sin inventario registrado</p>
       )}
@@ -63,7 +66,13 @@ export default function EspacioCard({ espacio, onEdit, onDelete }: Props) {
           )}
         </div>
       ))}
-
+ */}
+        <button
+          onClick={() => setShowModal(true)}
+          className="text-azul underline text-sm hover:text-opacity-80 text-left mt-2"
+        >
+          Ver inventario ({espacio.inventarios.length})
+        </button>
       {/* Botones */}
       <div className="flex gap-2 mt-3">
         <button
@@ -80,6 +89,15 @@ export default function EspacioCard({ espacio, onEdit, onDelete }: Props) {
           <MdDelete /> Eliminar
         </button>
       </div>
+
+      {/* Modal */}
+      {showModal && (
+        <EspacioModalInventario
+          inventarios={espacio.inventarios}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+
     </div>
   );
 }

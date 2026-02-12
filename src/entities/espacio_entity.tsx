@@ -1,5 +1,11 @@
-import type { CatalogoElementoEntity } from "./catalogo_elemento_entity";
-
+//import type { CatalogoElementoEntity } from "./catalogo_elemento_entity";
+export interface CatalogoElementoEntity {
+  catalogo_id: number;
+  nombre_elemento: string;
+  tipo: string;
+  descripcion?: string | "";
+  fecha_creacion: string;
+}
 export interface InventarioEntity {
   inventario_id: number;
   cantidad: number;
