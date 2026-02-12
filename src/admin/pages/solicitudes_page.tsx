@@ -14,6 +14,7 @@ import {
 import type SolicitudPendienteEntity from "../../entities/solicitud_pendiente_entity";
 import type SolicitudEspecialDTO from '../../entities/solicitud_especial_DTO';
 
+
 type EstadoSolicitud = "todas" | "pendiente" | "aprobada" | "rechazada";
 
 export default function Solicitudes() {
@@ -37,12 +38,14 @@ export default function Solicitudes() {
         console.error("Error al cargar solicitudes:", err);
       } finally {
         setLoading(false);
+        
       }
     };
-
+    
     fetchSolicitudes();
   }, []);
-
+  
+  console.log(solicitudes)
     useEffect(() => {
     const fetchSolicitudesEspeciales = async () => {
       try {

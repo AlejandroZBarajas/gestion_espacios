@@ -4,8 +4,8 @@ export default interface SolicitudPendienteEntity {
   espacio: string;
   periodo: string;
   materia: string;
-  plan_estudio: string;
   grupo: string;
   motivo: string;
   estado: string;
+  horarios: string
 }

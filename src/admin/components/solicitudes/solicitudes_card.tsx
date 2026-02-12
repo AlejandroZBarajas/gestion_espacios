@@ -17,11 +17,10 @@ const SolicitudCard: React.FC<Props> = ({ solicitud, onAceptar, onRechazar, edit
       <div className="text-gray-600 space-y-1 text-sm">
         <p><span className="font-medium">Usuario:</span> {solicitud.usuario}</p>
         <p><span className="font-medium">Espacio:</span> {solicitud.espacio}</p>
-        <p><span className="font-medium">Periodo:</span> {solicitud.periodo}</p>
         <p><span className="font-medium">Materia:</span> {solicitud.materia}</p>
-        <p><span className="font-medium">Plan:</span> {solicitud.plan_estudio}</p>
         <p><span className="font-medium">Grupo:</span> {solicitud.grupo}</p>
         <p><span className="font-medium">Motivo:</span> {solicitud.motivo}</p>
+        <p><span className="font-medium">Dia y hora solicitado: {solicitud.horarios}</span></p>
         <p>
           <span className="font-medium">Estado:</span>{" "}
           <span
