@@ -32,41 +32,6 @@ export default function EspacioCard({ espacio, onEdit, onDelete }: Props) {
         {espacio.disponible ? "Disponible" : "No disponible"}
       </p>
 
-      <h4 className="text-md font-semibold mt-3">Inventario:</h4>
-{/* 
-      {espacio.inventarios.length === 0 && (
-        <p className="text-sm text-gray-500">Sin inventario registrado</p>
-      )}
-
-      {espacio.inventarios.map((item, i) => (
-        <div key={i} className="border p-2 rounded text-sm">
-          <p>
-            <strong>Catálogo:</strong>{" "}
-            {item.inventario.catalogo_elemento.nombre_elemento}
-          </p>
-
-          <p>
-            <strong>Cantidad:</strong> {item.inventario.cantidad}
-          </p>
-
-          {item.inventario.marca && (
-            <p><strong>Marca:</strong> {item.inventario.marca}</p>
-          )}
-
-          {item.inventario.modelo && (
-            <p><strong>Modelo:</strong> {item.inventario.modelo}</p>
-          )}
-
-          {item.inventario.patrimonio && (
-            <p><strong>Patrimonio:</strong> {item.inventario.patrimonio}</p>
-          )}
-
-          {item.inventario.observaciones && (
-            <p><strong>Obs:</strong> {item.inventario.observaciones}</p>
-          )}
-        </div>
-      ))}
- */}
         <button
           onClick={() => setShowModal(true)}
           className="text-azul underline text-sm hover:text-opacity-80 text-left mt-2"

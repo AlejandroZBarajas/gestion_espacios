@@ -2,26 +2,26 @@ import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
 import Header from "../components/common/header";
 import SolicitudCard from '../components/solicitudes/solicitudes_card';
-//import SolicitudEspecialCard from '../components/solicitudes/solicitud_especial_card';
+import SolicitudEspecialCard from '../components/solicitudes/solicitud_especial_card';
 import { 
   getSolicitudesPendientes, 
-  /* aceptarSolicitudEspecial,
-  rechazarSolicitudEspecial, */
+  aceptarSolicitudEspecial,
+  rechazarSolicitudEspecial,
   aceptarSolicitud, 
   rechazarSolicitud,
-  //getEspecialesPendientes 
+  getEspeciales 
 } from "../../servicios/solicitudes_service";
 import type SolicitudPendienteEntity from "../../entities/solicitud_pendiente_entity";
-//import type SolicitudEspecialDTO from '../../entities/solicitud_especial_DTO';
+import type SolicitudEspecialDTO from '../../entities/solicitud_especial_DTO';
 
 type EstadoSolicitud = "todas" | "pendiente" | "aprobada" | "rechazada";
 
 export default function Solicitudes() {
   const [solicitudes, setSolicitudes] = useState<SolicitudPendienteEntity[]>([]);
-  //const [solicitudesEspeciales, setSolicitudesEspeciales] = useState<SolicitudEspecialDTO[]>([])
+  const [solicitudesEspeciales, setSolicitudesEspeciales] = useState<SolicitudEspecialDTO[]>([])
   const [loading, setLoading] = useState(true);
   const [filtroEstado, setFiltroEstado] = useState<EstadoSolicitud>("todas");
-  //const [filtroEstadoEspeciales, setFiltroEstadoEspeciales] = useState<EstadoSolicitud>("todas");
+  const [filtroEstadoEspeciales, setFiltroEstadoEspeciales] = useState<EstadoSolicitud>("todas");
 
   const id = Cookies.get("id");
   const user_id = Number(id); 
@@ -43,10 +43,10 @@ export default function Solicitudes() {
     fetchSolicitudes();
   }, []);
 
- /*    useEffect(() => {
+    useEffect(() => {
     const fetchSolicitudesEspeciales = async () => {
       try {
-        const data = await getEspecialesPendientes();
+        const data = await getEspeciales();
         setSolicitudesEspeciales(data);
       } catch (err) {
         console.error("Error al cargar solicitudes:", err);
@@ -56,7 +56,7 @@ export default function Solicitudes() {
     };
 
     fetchSolicitudesEspeciales();
-  }, []); */
+  }, []); 
 
   const handleAceptar = async (solicitud_id: number) => {
     console.log(solicitud_id)
@@ -73,7 +73,7 @@ export default function Solicitudes() {
     }
   };
 
- /*    const handleAceptarEspecial = async (solicitud_id: number) => {
+    const handleAceptarEspecial = async (solicitud_id: number) => {
     console.log(solicitud_id)
     try {
       await aceptarSolicitudEspecial(solicitud_id);
@@ -86,7 +86,7 @@ export default function Solicitudes() {
     } catch (err) {
       console.error("Error al aceptar solicitud:", err);
     }
-  }; */
+  }; 
 
   const handleRechazar = async (solicitud_id: number) => {
     console.log(solicitud_id)
@@ -102,7 +102,7 @@ export default function Solicitudes() {
     }
   };
 
- /*    const handleRechazarEspecial = async (solicitud_id: number) => {
+  const handleRechazarEspecial = async (solicitud_id: number) => {
     try {
       await rechazarSolicitudEspecial(solicitud_id);
       setSolicitudesEspeciales((prev) =>
@@ -114,16 +114,16 @@ export default function Solicitudes() {
       console.error("Error al rechazar solicitud:", err);
     }
   };
- */
+ 
 
   // Filtrar solicitudes según el estado seleccionado
   const solicitudesFiltradas = filtroEstado === "todas" 
     ? solicitudes 
     : solicitudes.filter(s => s.estado === filtroEstado);
-
-  /* const solicitudesEspecialesFiltradas = filtroEstadoEspeciales === "todas"
+  
+    const solicitudesEspecialesFiltradas = filtroEstadoEspeciales === "todas"
     ? solicitudesEspeciales
-    : solicitudesEspeciales.filter(s => s.estado === filtroEstadoEspeciales); */
+    : solicitudesEspeciales.filter(s => s.estado === filtroEstadoEspeciales); 
 
   return (
     <div>
@@ -178,7 +178,7 @@ export default function Solicitudes() {
       </div> 
 
       {/* Filtro para solicitudes especiales */}
-      {/* <div className="flex justify-center mb-6">
+       <div className="flex justify-center mb-6">
         <div className="flex items-center gap-3">
           <label htmlFor="filtro-estado-especiales" className="text-gray-700 font-semibold">
             Filtrar por estado:
@@ -195,9 +195,9 @@ export default function Solicitudes() {
             <option value="rechazada">Rechazadas</option>
           </select>
         </div>
-      </div> */}
+      </div> 
 
-      {/* {loading ? (
+       {loading ? (
         <p className="text-center text-gray-600">Cargando solicitudes...</p>
       ) : solicitudesEspecialesFiltradas.length === 0 ? (
         <p className="text-center text-gray-600">
@@ -215,7 +215,7 @@ export default function Solicitudes() {
             />
           ))}
         </div>
-      )} */}
+      )} 
     </div>
   );
 }

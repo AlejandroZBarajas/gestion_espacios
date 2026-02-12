@@ -78,8 +78,8 @@ export async function getMysolicitudesEspeciales(usuario_id:number):Promise <Sol
   return response.json();
 }
 
-export async function getEspecialesPendientes(): Promise <SolicitudEspecialDTO[]>{
-  const response  = await fetch(`${API_ESPECIALES}pen-rec`,{
+export async function getEspeciales(): Promise <SolicitudEspecialDTO[]>{
+  const response  = await fetch(`${API_ESPECIALES}`,{
     method: "GET",
     credentials:"include",
     headers: { "Content-Type": "application/json" },
