@@ -70,3 +70,4 @@ export const deleteEspacio = async (espacio_id: number): Promise<void> => {
   });
   if (!res.ok) throw new Error("Error al eliminar espacio");
 };
+

@@ -2,6 +2,7 @@ import type SolicitudEntity from "../entities/solicitud_entity";
 import type SolicitudEspecialEntity from "../entities/solicitud_esp_entity";
 import type SolicitudPendienteEntity from "../entities/solicitud_pendiente_entity";
 import type SolicitudEspecialDTO from "../entities/solicitud_especial_DTO";
+import type { HorasOcupadasDias } from "../entities/hora_ocupada_entity";
 
 const API_URL = import.meta.env.VITE_API_URL + "solicitudes";
 const API_ESPECIALES = import.meta.env.VITE_API_URL +"solicitud_especial/"
@@ -109,3 +110,11 @@ export async function rechazarSolicitudEspecial(id:number):Promise<void>{
   
   return response.json();
 }
+
+export const getHorasOcupadasByEspacioId = async (espacio_id:number): Promise<HorasOcupadasDias> => {
+  const res = await fetch(`${API_URL}/horario/${espacio_id}`,{
+    credentials: "include", 
+  });
+  if (!res.ok) throw new Error("Error al obtener espacios en el get all");
+  return res.json();
+}; 
