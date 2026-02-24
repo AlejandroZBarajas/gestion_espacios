@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Header from "../components/common/header";
 import SolicitudCard from "../components/solicitudes/solicitudes_card";
 import SolicitudEspecialCard from "../components/solicitudes/solicitud_especial_card";
-
+import type { SolicitudEnConflictoTableDTO } from "../../entities/solicitud_conflicto_entity";
 import {
   getSolicitudesPendientes,
   aceptarSolicitudEspecial,
@@ -11,10 +11,12 @@ import {
   aceptarSolicitud,
   rechazarSolicitud,
   getEspeciales,
+  getConflictos,
 } from "../../servicios/solicitudes_service";
 
 import type SolicitudPendienteEntity from "../../entities/solicitud_pendiente_entity";
 import type SolicitudEspecialDTO from "../../entities/solicitud_especial_DTO";
+import ConflictosTable from "../components/solicitudes/conflictos_table";
 
 type EstadoSolicitud = "todas" | "pendiente" | "aprobada" | "rechazada";
 type TipoSolicitud = "normal" | "especial";
@@ -26,24 +28,26 @@ export default function Solicitudes() {
 
   const [tipoSolicitud, setTipoSolicitud] = useState<TipoSolicitud>("normal");
   const [filtroEstado, setFiltroEstado] = useState<EstadoSolicitud>("todas");
+  const [conflictos, setConflictos] = useState<
+  SolicitudEnConflictoTableDTO[]
+>([]);
 
   const id = Cookies.get("id");
   const user_id = Number(id);
   const rol = Cookies.get("rol");
 
-  /* =========================
-     Fetch de datos
-  ========================= */
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const [normales, especiales] = await Promise.all([
+        const [normales, especiales, conflictosData] = await Promise.all([
           getSolicitudesPendientes(),
           getEspeciales(),
+          getConflictos(),
         ]);
 
         setSolicitudes(normales);
         setSolicitudesEspeciales(especiales);
+        setConflictos(conflictosData)
       } catch (err) {
         console.error("Error al cargar solicitudes:", err);
       } finally {
@@ -133,6 +137,13 @@ const solicitudesEspecialesFiltradas =
       <div className="w-full h-[100px] flex flex-col justify-center items-center">
         <h2 className="text-morado font-black text-4xl">Solicitudes</h2>
       </div>
+
+      {!loading && conflictos.length > 0 && (
+  <ConflictosTable
+    conflictos={conflictos}
+    onAceptar={handleAceptarEspecial}
+  />
+)}
 
       {/* Filtros */}
       <div className="flex justify-center mb-6 gap-6 flex-wrap">

@@ -3,6 +3,7 @@ import type SolicitudEspecialEntity from "../entities/solicitud_esp_entity";
 import type SolicitudPendienteEntity from "../entities/solicitud_pendiente_entity";
 import type SolicitudEspecialDTO from "../entities/solicitud_especial_DTO";
 import type { HorasOcupadasDias } from "../entities/hora_ocupada_entity";
+import type { SolicitudEnConflictoTableDTO } from "../entities/solicitud_conflicto_entity";
 
 const API_URL = import.meta.env.VITE_API_URL + "solicitudes";
 const API_ESPECIALES = import.meta.env.VITE_API_URL +"solicitud_especial/"
@@ -118,3 +119,13 @@ export const getHorasOcupadasByEspacioId = async (espacio_id:number): Promise<Ho
   if (!res.ok) throw new Error("Error al obtener espacios en el get all");
   return res.json();
 }; 
+
+export async function getConflictos(): Promise <SolicitudEnConflictoTableDTO[]>{
+  const response  = await fetch(`${API_URL}/conflictos`,{
+    method: "GET",
+    credentials:"include",
+    headers: { "Content-Type": "application/json" },
+  })
+    if (!response.ok) throw new Error("Error al obtener solicitudes");
+  return response.json();
+}
