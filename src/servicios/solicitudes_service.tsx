@@ -43,10 +43,13 @@ export async function aceptarSolicitud(
   solicitud_id: number,
   user_id: number
 ): Promise<void> {
+  console.log("aceptar solicitud con id: ", solicitud_id, " por el usuario: ", user_id);
+  console.log(`${API_URL}/aprobar/${solicitud_id}/${user_id}`)
   const response = await fetch(`${API_URL}/aprobar/${solicitud_id}/${user_id}`, {
     method: "POST",
     credentials: "include",
   });
+  console.log("response del servidor: ", response)
   if (!response.ok) throw new Error("Error al aceptar solicitud");
 }
 
@@ -96,8 +99,8 @@ export async function aceptarSolicitudEspecial(id:number):Promise<void>{
     method:"POST",
     credentials:"include",
   })
-  if (!response.ok) throw new Error("Error al obtener solicitudes");
-  console.log(response)
+  if (!response.ok) throw new Error("Error al aceptar solicitude especial");
+  //console.log(response)
   return response.json();
 }
 
@@ -126,6 +129,7 @@ export async function getConflictos(): Promise <SolicitudEnConflictoTableDTO[]>{
     credentials:"include",
     headers: { "Content-Type": "application/json" },
   })
+  console.log("response del servidor al obtener conflictos: ", response)
     if (!response.ok) throw new Error("Error al obtener solicitudes");
   return response.json();
 }

@@ -41,12 +41,12 @@ export default function Header(){
     }
 
     return(
-        <div id="header" className="w-full flex flex-row justify-evenly bg-morado h-[100px] w-full items-center"> 
+        <div id="header" className="w-full flex flex-row justify-evenly bg-morado h-[100px] items-center"> 
             <h2 className="text-moradito text-xl font-bold" onClick={toSolicitudes}>Solicitudes</h2>
     
             <h2 className="text-moradito text-xl font-bold" onClick={toEspacios}>Espacios</h2>
         
-            <h2 className="text-moradito text-xl font-bold" onClick={toUsers}>Usarios</h2>
+            <h2 className="text-moradito text-xl font-bold" onClick={toUsers}>Usuarios</h2>
         
             <h2 className="text-moradito text-xl font-bold" onClick={toInventario}>Inventario</h2>
         
