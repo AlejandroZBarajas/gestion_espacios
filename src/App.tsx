@@ -1,20 +1,75 @@
-// src/App.jsx
+import { Routes, Route } from "react-router-dom";
+import Login from "./common/login";
+import { RoleProtectedRoute } from "./common/protected_route";
+import { useAuth } from "./common/use_auth";
+
+import Usuarios from "./admin/pages/usuarios_page";
+import Solicitudes from "./admin/pages/solicitudes_page";
+import InventarioPage from "./admin/pages/inventario_page";
+import Periodos from "./admin/pages/periodos_page";
+import ReportesPendientesPage from "./admin/pages/reportes_page";
+import MateriasPage from "./admin/pages/materias_pages";
+import EspaciosPage from "./admin/pages/espacios_page";
+import VerEspaciosPage from "./docente/pages/ver_espacios_page";
+import MisSolicitudesPage from "./docente/pages/mis_solicitudes_page";
+import MisReportesPage from "./docente/pages/mis_reportes_page";
+
 export default function App() {
+  const { user } = useAuth();
+
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-2xl shadow-lg max-w-sm text-center">
-        <h1 className="text-3xl font-bold text-blue-600 mb-4">
-          ¡Tailwind está funcionando! 🎉
-        </h1>
-        <p className="text-gray-700 mb-6">
-          Si ves este texto con estilos bonitos, TailwindCSS está listo.
-        </p>
-        <div className="flex gap-4 justify-center">
-          <div className="bg-green-500 text-white px-4 py-2 rounded-lg">Botón 1</div>
-          <div className="bg-red-500 text-white px-4 py-2 rounded-lg">Botón 2</div>
-        </div>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<Login />} />
+
+      <Route path="/solicitudes" element={
+        <RoleProtectedRoute allowedRoles={["administrador"]} userRole={user.rol}>
+          <Solicitudes />
+        </RoleProtectedRoute>} />
+
+      <Route path="/espacios" element={
+        <RoleProtectedRoute allowedRoles={["administrador"]} userRole={user.rol}>
+          <EspaciosPage/>
+        </RoleProtectedRoute>} />
+
+      <Route path="/usuarios" element={
+        <RoleProtectedRoute allowedRoles={["administrador"]} userRole={user.rol}>
+          <Usuarios />
+      </RoleProtectedRoute>} />
+
+      <Route path="/inventario" element={
+        <RoleProtectedRoute allowedRoles={["administrador"]} userRole={user.rol}>
+          <InventarioPage/>
+        </RoleProtectedRoute>} />
+
+      <Route path="/periodos" element={
+        <RoleProtectedRoute allowedRoles={["administrador"]} userRole={user.rol}>
+          <Periodos />
+        </RoleProtectedRoute>} />
+
+      <Route path="/reportes" element={
+        <RoleProtectedRoute allowedRoles={["administrador"]} userRole={user.rol}>
+          <ReportesPendientesPage />
+        </RoleProtectedRoute>} />
+
+      <Route path="/materias" element={
+        <RoleProtectedRoute allowedRoles={["administrador"]} userRole={user.rol}>
+          <MateriasPage />
+        </RoleProtectedRoute>} />
+
+      <Route path="/verespacios" element={
+        <RoleProtectedRoute allowedRoles={["docente"]} userRole={user.rol}>
+          <VerEspaciosPage/>
+        </RoleProtectedRoute>} />
+
+      <Route path="/missolicitudes" element={
+        <RoleProtectedRoute allowedRoles={["docente"]} userRole={user.rol}>
+          <MisSolicitudesPage />
+        </RoleProtectedRoute>} />
+
+      <Route path="/misreportes" element={
+        <RoleProtectedRoute allowedRoles={["docente"]} userRole={user.rol}>
+          <MisReportesPage />
+        </RoleProtectedRoute>} />
+    </Routes>
   );
 }
-
