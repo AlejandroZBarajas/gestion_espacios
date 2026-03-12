@@ -1,12 +1,13 @@
 export default interface InventarioEntity {
   inventario_id?: number;              // generado por la BD
-  espacio_id: number;
-  nombre_elemento: string;
-  tipo: string;             // ej: "infraestructura"
-  estado: string;           // ej: "operativo"
-  descripcion: string;
+  cantidad?: number;
   marca: string;
   modelo: string;
   patrimonio: string;
+  estado: string;           // ej: "operativo"
   observaciones: string;
+  espacio_id: number;
+  nombre_elemento: string;
+  tipo: string;             // ej: "infraestructura"
+  descripcion: string;
 }
