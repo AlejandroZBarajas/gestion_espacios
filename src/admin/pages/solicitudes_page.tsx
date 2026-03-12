@@ -35,90 +35,68 @@ export default function Solicitudes() {
   const id = Cookies.get("id");
   const user_id = Number(id);
   const rol = Cookies.get("rol");
-
+    
   useEffect(() => {
-    const fetchAll = async () => {
-      try {
-        const [normales, especiales, conflictosData] = await Promise.all([
-          getSolicitudesPendientes(),
-          getEspeciales(),
-          getConflictos(),
-        ]);
-
-        setSolicitudes(normales);
-        setSolicitudesEspeciales(especiales);
-        setConflictos(conflictosData)
-      } catch (err) {
-        console.error("Error al cargar solicitudes:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchAll();
   }, []);
 
-  /* =========================
-     Handlers normales
-  ========================= */
+ const fetchAll = async () => {
+  try {
+    const [normales, especiales, conflictosData] = await Promise.all([
+      getSolicitudesPendientes(),
+      getEspeciales(),
+      getConflictos(),
+    ]);
+
+    setSolicitudes(normales);
+    setSolicitudesEspeciales(especiales);
+    setConflictos(conflictosData);
+  } catch (err) {
+    console.error("Error al cargar solicitudes:", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
   const handleAceptar = async (solicitud_id: number) => {
     try {
       await aceptarSolicitud(solicitud_id, user_id);
-      setSolicitudes((prev) =>
-        prev.map((s) =>
-          s.solicitud_id === solicitud_id ? { ...s, estado: "aprobada" } : s
-        )
-      );
+    await fetchAll(); 
+
     } catch (err) {
       console.error("Error al aceptar solicitud:", err);
     }
   };
 
-  const handleRechazar = async (solicitud_id: number) => {
-    try {
-      await rechazarSolicitud(solicitud_id);
-      setSolicitudes((prev) =>
-        prev.map((s) =>
-          s.solicitud_id === solicitud_id ? { ...s, estado: "rechazada" } : s
-        )
-      );
-    } catch (err) {
-      console.error("Error al rechazar solicitud:", err);
-    }
-  };
+const handleRechazar = async (solicitud_id: number) => {
+  try {
+    await rechazarSolicitud(solicitud_id);
+    await fetchAll(); // ← ya lo tienes en handleAceptar, hazlo aquí también
+  } catch (err) {
+    console.error("Error al rechazar solicitud:", err);
+  }
+};
 
   /* =========================
      Handlers especiales
   ========================= */
-  const handleAceptarEspecial = async (solicitud_id: number) => {
-    try {
-      await aceptarSolicitudEspecial(solicitud_id);
-      setSolicitudesEspeciales((prev) =>
-        prev.map((s) =>
-          s.solicitud_especial_id === solicitud_id
-            ? { ...s, estado: "aprobada" }
-            : s
-        )
-      );
-    } catch (err) {
-      console.error("Error al aceptar solicitud especial:", err);
-    }
-  };
+ const handleAceptarEspecial = async (solicitud_id: number) => {
+  try {
+    await aceptarSolicitudEspecial(solicitud_id);
+    await fetchAll(); // ← reemplaza el setSolicitudesEspeciales local
+  } catch (err) {
+    console.error("Error al aceptar solicitud especial:", err);
+  }
+};
 
-  const handleRechazarEspecial = async (solicitud_id: number) => {
-    try {
-      await rechazarSolicitudEspecial(solicitud_id);
-      setSolicitudesEspeciales((prev) =>
-        prev.map((s) =>
-          s.solicitud_especial_id === solicitud_id
-            ? { ...s, estado: "rechazada" }
-            : s
-        )
-      );
-    } catch (err) {
-      console.error("Error al rechazar solicitud especial:", err);
-    }
-  };
+const handleRechazarEspecial = async (solicitud_id: number) => {
+  try {
+    await rechazarSolicitudEspecial(solicitud_id);
+    await fetchAll(); // ← igual aquí
+  } catch (err) {
+    console.error("Error al rechazar solicitud especial:", err);
+  }
+};
 
  const solicitudesNormalesFiltradas =
   filtroEstado === "todas"
