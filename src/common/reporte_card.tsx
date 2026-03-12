@@ -52,10 +52,13 @@ export default function ReporteCard({ reporte, onEdit, changeStatus, onDelete }:
           <>
             {reporte.reporte_id && (
               <button
-                onClick={() => changeStatus?.(reporte.reporte_id!)}
+                onClick={async () => {
+                  await changeStatus?.(reporte.reporte_id!);
+                  window.location.reload();
+                }}
                 className="px-3 py-1 bg-morado text-white rounded text-sm hover:bg-morado-dark"
               >
-                Reportado
+                Reportar
               </button>
             )}
           </>
@@ -70,14 +73,14 @@ export default function ReporteCard({ reporte, onEdit, changeStatus, onDelete }:
               </button>
             )}
 
-            {reporte.reporte_id && (
-              <button
-                onClick={() => changeStatus?.(reporte.reporte_id!)}
-                className="px-3 py-1 bg-morado text-white rounded text-sm hover:bg-morado-dark"
-              >
-                Reportado
-              </button>
-            )}
+        {reporte.reporte_id && reporte.estado !== "en_proceso" && (
+          <button
+            onClick={() => changeStatus?.(reporte.reporte_id!)}
+            className="px-3 py-1 bg-morado text-white rounded text-sm hover:bg-morado-dark"
+          >
+            Reportar
+          </button>
+        )}      
 
             {reporte.reporte_id && onDelete && (
               <button
