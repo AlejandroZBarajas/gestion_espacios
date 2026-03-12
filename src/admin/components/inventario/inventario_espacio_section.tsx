@@ -48,13 +48,6 @@ export default function InventarioEspacioSection({
     <div className="mb-8 relative">
       <h2 className="text-xl font-semibold text-azul mb-2">{espacioNombre}</h2>
 
-    {/*   <button
-        onClick={() => setShowForm(true)}
-        className="mb-2 bg-azul text-white px-4 py-2 rounded shadow flex items-center gap-1"
-      >
-        <MdAdd /> Agregar elemento
-      </button> */}
-
       <InventarioTable
         data={data}
         onDelete={onDelete}

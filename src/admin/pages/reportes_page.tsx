@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ReporteCard from "../../common/reporte_card";
 import type ReporteEntity from "../../entities/reporte_entity";
-import { getReportesPendientes } from "../../servicios/reportes_service";
+import { getReportesPendientes, changeStatusReporte } from "../../servicios/reportes_service";
 import Header from "../components/common/header";
 
 export default function ReportesPendientesPage() {
@@ -31,7 +31,13 @@ export default function ReportesPendientesPage() {
     console.log("Ver reporte", id);
   };
 
-  const handleChangeStatus = (id: number) => {
+  const handleChangeStatus = async (id: number) => {
+    try {
+      await changeStatusReporte(id);
+    } catch (error) {
+      console.error("Error al cambiar el estado del reporte:", error);
+      setError("Error al cambiar el estado del reporte");
+    }
     console.log("Cambiar estado del reporte", id);
   };
 
