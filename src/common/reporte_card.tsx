@@ -13,7 +13,7 @@ const rol = getCookie("rol");
 export default function ReporteCard({ reporte, onEdit, changeStatus, onDelete }: Props) {
 
   return (
-    <div className="bg-white shadow-md rounded-2xl border p-6 hover:shadow-lg transition-shadow duration-300 flex flex-col h-full">
+    <div className="bg-white shadow-md rounded-2xl border p-6 hover:shadow-lg transition-shadow duration-300 flex flex-col h-full ">
       <h2 className="text-lg font-bold text-morado">{`Item reportado ID: ${reporte.inventario_id}`}</h2>
 
       <div className="border-l-4 border-morado pl-4">
