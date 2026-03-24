@@ -41,6 +41,7 @@ export default function Solicitudes() {
   }, []);
 
  const fetchAll = async () => {
+  setLoading(true);
   try {
     const [normales, especiales, conflictosData] = await Promise.all([
       getSolicitudesPendientes(),
@@ -61,10 +62,10 @@ export default function Solicitudes() {
   const handleAceptar = async (solicitud_id: number) => {
     try {
       await aceptarSolicitud(solicitud_id, user_id);
-    await fetchAll(); 
-
     } catch (err) {
-      console.error("Error al aceptar solicitud:", err);
+      console.warn("Error al aceptar solicitud:", err);
+    } finally {
+      await fetchAll(); // Asegura que se actualicen las solicitudes después de aceptar
     }
   };
 
@@ -119,7 +120,7 @@ const solicitudesEspecialesFiltradas =
       {!loading && conflictos.length > 0 && (
   <ConflictosTable
     conflictos={conflictos}
-    onAceptar={handleAceptarEspecial}
+    onAceptar={handleAceptar}
   />
 )}
 
