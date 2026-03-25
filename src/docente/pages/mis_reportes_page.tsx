@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { MdAdd } from "react-icons/md";
 import HeaderDocente from "../components/header_docente";
-import MiReporteCard from "../../common/mi_reporte_card";
+import MiReporteCard from "../components/mi_reporte_card";
 import ReporteFormModal from "../components/reporte_form";
 
 import { getCookie } from "../../common/cookie";

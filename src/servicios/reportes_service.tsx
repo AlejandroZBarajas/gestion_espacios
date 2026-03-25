@@ -1,3 +1,4 @@
+import type ReporteTableEntity from "../entities/reporte_table_entity";
 import type ReporteEntity from "../entities/mi_reporte_entity";
 import type ReportePostEntity from "../entities/reporte_post_entity";
 
@@ -21,15 +22,6 @@ export async function createReporte(
     body: JSON.stringify(data), // { usuario_id, inventario_id, descripcion }
   });
   if (!res.ok) throw new Error("Error al crear el reporte");
-  return res.json();
-}
-
-export async function getReportesPendientes(): Promise<ReporteEntity[]> {
-  const res = await fetch(`${API_URL}/pendientes`, { 
-    credentials: "include", 
-    method: "GET" 
-  });
-  if (!res.ok) throw new Error("Error al obtener inventario por espacio");
   return res.json();
 }
 
@@ -65,4 +57,31 @@ export async function deleteReporte(reporte_id: number): Promise<void> {
     method: "DELETE",
   });
   if (!res.ok) throw new Error("Error al eliminar el reporte");
+}
+
+export async function getAllReportes(): Promise<ReporteTableEntity[]> {
+  const res = await fetch(`${API_URL}`, {
+    credentials: "include",
+    method: "GET",
+  });
+  if (!res.ok) throw new Error("Error al obtener todos los reportes");
+  return res.json();
+}
+
+export async function marcarEnProceso(reporteId: number): Promise<void> {
+  const res = await fetch(`${API_URL}/proceso/${reporteId}`, {
+    credentials: "include",
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!res.ok) throw new Error("Error al marcar como en proceso");
+}
+
+export async function marcarReparado(reporteId: number): Promise<void> {
+  const res = await fetch(`${API_URL}/reparado/${reporteId}`, {
+    credentials: "include",
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!res.ok) throw new Error("Error al marcar como reparado");
 }
