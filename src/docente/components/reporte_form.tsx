@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type ReporteEntity from "../../entities/reporte_entity";
+import type MiReporteEntity from "../../entities/mi_reporte_entity";
 import type UbicacionEntity from "../../entities/ubicacion_entity";
 import type EspacioEntity from "../../entities/espacio_entity";
 import type InventarioEntity from "../../entities/inventario_entity";
@@ -8,18 +8,25 @@ import { getUbicaciones } from "../../servicios/ubicaciones_service";
 import { getEspaciosbyUbicacion } from "../../servicios/espacios_service";
 import { getInventarioByEspacio } from "../../servicios/inventario_service";
 
+interface ReporteFormData {
+  inventario_id: number;
+  descripcion: string;
+  estado: string;
+}
+
 interface Props {
-  initialData?: ReporteEntity;
-  onSubmit: (data: Omit<ReporteEntity, "reporte_id" | "usuario_id">) => void;
+  initialData?: MiReporteEntity;   // ← ahora usa MiReporteEntity directamente
+  usuarioId: number;
+  onSubmit: (data: ReporteFormData) => void;
   onCancel: () => void;
 }
 
 export default function ReporteFormModal({
   initialData,
+  //usuarioId,                        // ← desestructurado correctamente
   onSubmit,
   onCancel,
 }: Props) {
-
   const [ubicaciones, setUbicaciones] = useState<UbicacionEntity[]>([]);
   const [espacios, setEspacios] = useState<EspacioEntity[]>([]);
   const [inventario, setInventario] = useState<InventarioEntity[]>([]);
@@ -34,9 +41,7 @@ export default function ReporteFormModal({
 
   useEffect(() => {
     if (ubicacionId) {
-      getEspaciosbyUbicacion(ubicacionId)
-        .then(setEspacios)
-        .catch(console.error);
+      getEspaciosbyUbicacion(ubicacionId).then(setEspacios).catch(console.error);
     } else {
       setEspacios([]);
       setEspacioId(null);
@@ -45,23 +50,35 @@ export default function ReporteFormModal({
 
   useEffect(() => {
     if (espacioId) {
-      getInventarioByEspacio(espacioId)
-        .then(setInventario)
-        .catch(console.error);
+      getInventarioByEspacio(espacioId).then(setInventario).catch(console.error);
     } else {
       setInventario([]);
       setInventarioId(0);
     }
   }, [espacioId]);
 
-  // cuando editemos, rellenamos el form
+  // Al editar, pre-rellenar ubicación/espacio para cargar los selects en cascada
   useEffect(() => {
     if (initialData) {
-      console.log("data que recibe el form: ",initialData)
-      setInventarioId(initialData.inventario_id);
       setDescripcion(initialData.descripcion);
+      // Pre-cargamos ubicación y espacio para que los selects encadenados funcionen
+      if (initialData.ubicacion_id) setUbicacionId(initialData.ubicacion_id);
+      if (initialData.espacio_id)   setEspacioId(initialData.espacio_id);
+      // inventario_id se setea cuando el inventario ya cargó (useEffect abajo)
     }
   }, [initialData]);
+
+  // Espera a que el inventario cargue para seleccionar el item correcto
+  // MiReporteEntity no tiene inventario_id directo, así que el usuario
+  // tendrá que reconfirmarlo — los campos de ubicación y espacio ya vienen prellenados
+  useEffect(() => {
+    if (inventario.length > 0 && inventarioId === 0) {
+      // Si solo hay un item, lo seleccionamos automáticamente
+      if (inventario.length === 1 && inventario[0].inventario_id) {
+  setInventarioId(inventario[0].inventario_id);
+}
+    }
+  }, [inventario]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +86,7 @@ export default function ReporteFormModal({
     onSubmit({
       inventario_id: inventarioId,
       descripcion,
-      estado:"Pendiente"
+      estado: initialData?.estado ?? "pendiente",
     });
   };
 
@@ -81,7 +98,6 @@ export default function ReporteFormModal({
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Selección de ubicación */}
           <h3>Edificio</h3>
           <select
             value={ubicacionId ?? ""}
@@ -97,7 +113,6 @@ export default function ReporteFormModal({
             ))}
           </select>
 
-          {/* Selección de espacio */}
           <h3>Espacios disponibles en este edificio</h3>
           <select
             value={espacioId ?? ""}
@@ -114,7 +129,6 @@ export default function ReporteFormModal({
             ))}
           </select>
 
-          {/* Selección de inventario */}
           <h3>Seleccione artículo a reportar</h3>
           <select
             value={inventarioId || ""}
@@ -131,7 +145,6 @@ export default function ReporteFormModal({
             ))}
           </select>
 
-          {/* Descripción */}
           <h3>Reporte</h3>
           <textarea
             placeholder="Descripción"

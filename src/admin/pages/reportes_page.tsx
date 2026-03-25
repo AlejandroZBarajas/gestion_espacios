@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import ReporteCard from "../../common/reporte_card";
-import type ReporteEntity from "../../entities/reporte_entity";
+import ReporteCard from "../../common/mi_reporte_card";
+import type ReporteEntity from "../../entities/mi_reporte_entity";
 import { getReportesPendientes, changeStatusReporte } from "../../servicios/reportes_service";
 import Header from "../components/common/header";
 
