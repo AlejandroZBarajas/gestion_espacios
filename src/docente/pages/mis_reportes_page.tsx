@@ -1,67 +1,42 @@
 import { useState, useEffect } from "react";
 import { MdAdd } from "react-icons/md";
 import HeaderDocente from "../components/header_docente";
-import ReporteCard from "../../common/reporte_card";
+import MiReporteCard from "../components/mi_reporte_card";
 import ReporteFormModal from "../components/reporte_form";
 
 import { getCookie } from "../../common/cookie";
-import { getMisReportes, createReporte, updateReporte } from "../../servicios/reportes_service";
+import {
+  getMisReportes,
+  createReporte,
+  updateReporte,
+  deleteReporte,
+} from "../../servicios/reportes_service";
 
-import type ReporteEntity from "../../entities/reporte_entity";
+import type MiReporteEntity from "../../entities/mi_reporte_entity";
 
 export default function MisReportesPage() {
-  const [misReportes, setMisReportes] = useState<ReporteEntity[]>([]);
+  const [misReportes, setMisReportes] = useState<MiReporteEntity[]>([]);
   const [modalAbierto, setModalAbierto] = useState(false);
-  const [editItem, setEditItem] = useState<ReporteEntity | null>(null);
+  const [editItem, setEditItem] = useState<MiReporteEntity | null>(null);
   const [filtroEstado, setFiltroEstado] = useState<string>("todos");
 
   const usuarioId = Number(getCookie("id"));
 
-  const estadosDisponibles = ["todos", ...new Set(misReportes.map((r) => r.estado).filter(Boolean))];
+  const estadosDisponibles = [
+    "todos",
+    ...new Set(misReportes.map((r) => r.estado).filter(Boolean)),
+  ];
 
-  const reportesFiltrados = filtroEstado === "todos"
-    ? misReportes
-    : misReportes.filter((r) => r.estado === filtroEstado);
+  const reportesFiltrados =
+    filtroEstado === "todos"
+      ? misReportes
+      : misReportes.filter((r) => r.estado === filtroEstado);
 
   useEffect(() => {
-    async function fetchReportes() {
-      try {
-        const data = await getMisReportes(usuarioId);
-        setMisReportes(data);
-      } catch (err) {
-        console.error("Error al cargar reportes:", err);
-      }
-    }
-    fetchReportes();
+    getMisReportes(usuarioId)
+      .then(setMisReportes)
+      .catch(console.error);
   }, [usuarioId]);
-
-  const handleCreateOrUpdate = async (
-    data: Omit<ReporteEntity, "reporte_id" | "usuario_id">
-  ) => {
-    try {
-      if (editItem) {
-        const actualizado = await updateReporte(editItem.reporte_id!, {
-          usuario_id: usuarioId,
-          ...data,
-        });
-        setMisReportes((prev) =>
-          prev.map((r) => r.reporte_id === editItem.reporte_id ? actualizado : r)
-        );
-        setEditItem(null);
-        setModalAbierto(false);
-        return;
-      }
-      const nuevo = await createReporte({ usuario_id: usuarioId, ...data } as ReporteEntity);
-      setMisReportes((prev) => [...prev, nuevo]);
-      setModalAbierto(false);
-    } catch (error) {
-      console.error("Error creando o actualizando reporte:", error);
-    }
-  };
-
-  const handleDelete = (id: number) => {
-    setMisReportes((prev) => prev.filter((r) => r.reporte_id !== id));
-  };
 
   const handleEdit = (id: number) => {
     const reporte = misReportes.find((r) => r.reporte_id === id);
@@ -71,13 +46,58 @@ export default function MisReportesPage() {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteReporte(id);
+      setMisReportes((prev) => prev.filter((r) => r.reporte_id !== id));
+    } catch (error) {
+      console.error("Error al eliminar reporte:", error);
+    }
+  };
+
+  const handleCreateOrUpdate = async (data: {
+    inventario_id: number;
+    descripcion: string;
+    estado: string;
+  }) => {
+    try {
+      if (editItem) {
+        await updateReporte(editItem.reporte_id!, {
+          usuario_id: usuarioId,
+          ...data,
+        });
+        // El backend del PUT no siempre devuelve el objeto enriquecido,
+        // así que actualizamos solo los campos editables en el estado local
+        setMisReportes((prev) =>
+          prev.map((r) =>
+            r.reporte_id === editItem.reporte_id
+              ? { ...r, descripcion: data.descripcion, estado: data.estado }
+              : r
+          )
+        );
+        setEditItem(null);
+      } else {
+        await createReporte({
+          usuario_id: usuarioId,
+          inventario_id: data.inventario_id,
+          descripcion: data.descripcion,
+        });
+   
+        const actualizados = await getMisReportes(usuarioId);
+        setMisReportes(actualizados);
+      }
+      setModalAbierto(false);
+    } catch (error) {
+      console.error("Error creando o actualizando reporte:", error);
+    }
+  };
+
   return (
     <div className="relative min-h-screen">
       <HeaderDocente />
 
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 border-b border-gray-200 pb-4">
         <h1 className="text-3xl text-morado font-bold">Mis Reportes</h1>
-
         <select
           value={filtroEstado}
           onChange={(e) => setFiltroEstado(e.target.value)}
@@ -91,18 +111,20 @@ export default function MisReportesPage() {
         </select>
       </div>
 
-      <div className="grid gap-4">
+      <div className="gap-4 flex flex-wrap p-4">
         {reportesFiltrados.length > 0 ? (
           reportesFiltrados.map((reporte) => (
-            <ReporteCard
+            <MiReporteCard
               key={reporte.reporte_id}
               reporte={reporte}
-              onDelete={handleDelete}
               onEdit={handleEdit}
+              onDelete={handleDelete}
             />
           ))
         ) : (
-          <p className="text-gray-400 text-center mt-10">No hay reportes con ese estado.</p>
+          <p className="text-gray-400 text-center mt-10">
+            No hay reportes con ese estado.
+          </p>
         )}
       </div>
 
@@ -115,7 +137,8 @@ export default function MisReportesPage() {
 
       {modalAbierto && (
         <ReporteFormModal
-          initialData={editItem || undefined}
+          initialData={editItem ?? undefined}
+          usuarioId={usuarioId}
           onSubmit={handleCreateOrUpdate}
           onCancel={() => { setModalAbierto(false); setEditItem(null); }}
         />

@@ -50,7 +50,11 @@ export async function aceptarSolicitud(
     credentials: "include",
   });
   console.log("response del servidor: ", response)
-  if (!response.ok) throw new Error("Error al aceptar solicitud");
+  if (!response.ok) {
+    const errorBody = await response.text();
+    console.error("Status:", response.status, "Body:", errorBody);
+    throw new Error("Error al aceptar solicitud");
+  }
 }
 
 export async function verMisSolicitudes(user_id: number): Promise<SolicitudPendienteEntity[]> {

@@ -12,7 +12,7 @@ interface Props {
   onSubmit: (solicitud: SolicitudEntity) => void;
   onCancel: () => void;
 }
-
+ 
 export default function SolicitudForm({
   usuarioId,
   espacioId,
