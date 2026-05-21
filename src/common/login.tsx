@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCookie } from "./cookie";
 import { useAuth } from "./use_auth";
 
 export default function Login() {

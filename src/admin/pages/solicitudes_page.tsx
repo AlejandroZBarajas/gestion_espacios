@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../common/auth_context";
 import Header from "../components/common/header";
