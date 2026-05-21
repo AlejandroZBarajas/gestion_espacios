@@ -13,42 +13,55 @@ export default function Login() {
   const API_URL = import.meta.env.VITE_API_URL + "auth/login";
 
   const handleLogin = async () => {
-    setError("");
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        credentials: "include", 
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, contrasena }),
-      });
+  setError("");
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      credentials: "include", // Permite que el navegador guarde las cookies de fondo (.fun)
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, contrasena }),
+    });
 
-      if (!res.ok) {
-        const data = await res.json();
-  
-        throw new Error(data.message || "Error al iniciar sesión");
-      }
-      
-      const userData = {
-        id: getCookie("id") || undefined,
-        rol: getCookie("rol"),
-      };
-      
-      setUser(userData);
-      console.log(userData)
-      const rol = userData.rol;
-      if (rol === "administrador") {
-        navigate("/solicitudes");
-      } else {
-        navigate("/verespacios");
-      }
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Error desconocido al iniciar sesión");
-      }
+    const data = await res.json(); // Capturamos la respuesta JSON del backend
+
+    // 1. 🛡️ Validamos primero si la respuesta NO fue exitosa
+    if (!res.ok) {
+      throw new Error(data.mensaje || data.message || "Error al iniciar sesión");
+    }
+
+    // 2. 📋 Si llegamos aquí, la respuesta es 200 OK. Mapeamos el usuario completo.
+    const usuarioBackend = data.usuario;
+
+    if (!usuarioBackend || !usuarioBackend.rol) {
+      throw new Error("La respuesta del servidor no contiene datos de usuario válidos.");
+    }
+
+    const userData = {
+      id: String(usuarioBackend.usuario_id || usuarioBackend.id),
+      nombre: usuarioBackend.nombre || "",
+      email: usuarioBackend.email || "",
+      rol: usuarioBackend.rol,
+    };
+
+    // 3. 💾 Guardamos una Sola Vez en tu nuevo AuthContext (que lo mandará a localStorage)
+    setUser(userData);
+    console.log("Datos de usuario cargados en memoria de React:", userData);
+    
+    // 4. 🚀 Redirección síncrona según el rol
+    if (userData.rol === "administrador") {
+      navigate("/solicitudes");
+    } else {
+      navigate("/verespacios");
+    }
+
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      setError(err.message);
+    } else {
+      setError("Error desconocido al iniciar sesión");
     }
   }
+};
 
   return (
     <div className="flex flex-col h-screen bg-white items-center">
