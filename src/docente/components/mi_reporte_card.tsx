@@ -1,4 +1,4 @@
-import type MiReporteEntity from "../entities/mi_reporte_entity";
+import type MiReporteEntity from "../../entities/mi_reporte_entity";
 
 interface Props {
   reporte: MiReporteEntity;
