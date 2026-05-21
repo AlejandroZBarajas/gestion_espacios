@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { AuthContext } from "../../common/auth_context";
 import Header from "../components/common/header";
 import SolicitudCard from "../components/solicitudes/solicitudes_card";
 import SolicitudEspecialCard from "../components/solicitudes/solicitud_especial_card";
@@ -22,42 +23,69 @@ type EstadoSolicitud = "todas" | "pendiente" | "aprobada" | "rechazada";
 type TipoSolicitud = "normal" | "especial";
 
 export default function Solicitudes() {
+  const authContext = useContext(AuthContext);
+
   const [solicitudes, setSolicitudes] = useState<SolicitudPendienteEntity[]>([]);
   const [solicitudesEspeciales, setSolicitudesEspeciales] = useState<SolicitudEspecialDTO[]>([]);
   const [loading, setLoading] = useState(true);
-
   const [tipoSolicitud, setTipoSolicitud] = useState<TipoSolicitud>("normal");
   const [filtroEstado, setFiltroEstado] = useState<EstadoSolicitud>("todas");
-  const [conflictos, setConflictos] = useState<
-  SolicitudEnConflictoTableDTO[]
->([]);
+  const [conflictos, setConflictos] = useState<SolicitudEnConflictoTableDTO[]>([]);
 
-  const id = Cookies.get("id");
-  const user_id = Number(id);
-  const rol = Cookies.get("rol");
-    
+  const user = authContext?.user;
+  const user_id = user?.id ? Number(user.id) : 0; // 👈 Si no existe, que sea 0 en vez de NaN
+  const rol = user?.rol || localStorage.getItem("auth_rol"); // 👈 Salvavidas por si el contexto parpadea
+
+  // 🔍 LOG 1: Saber qué ve el componente en CADA renderizado
+  console.log("📺 [RENDER SOLICITUDES] Estado actual:", {
+    user_id,
+    rol,
+    loading,
+    solicitudesLength: solicitudes.length,
+    conflictosLength: conflictos.length
+  });
+
   useEffect(() => {
+  console.log("🔄 [DEBUG EFFECT] Evaluando carga para user_id:", user_id);
+  
+  if (user_id && user_id > 0) {
     fetchAll();
-  }, []);
-
- const fetchAll = async () => {
-  setLoading(true);
-  try {
-    const [normales, especiales, conflictosData] = await Promise.all([
-      getSolicitudesPendientes(),
-      getEspeciales(),
-      getConflictos(),
-    ]);
-
-    setSolicitudes(normales);
-    setSolicitudesEspeciales(especiales);
-    setConflictos(conflictosData);
-  } catch (err) {
-    console.error("Error al cargar solicitudes:", err);
-  } finally {
-    setLoading(false);
+  } else {
+    console.warn("⚠️ [DEBUG EFFECT] Esperando un ID de usuario válido. Actual:", user_id);
   }
-};
+}, [user_id]); // Sigue escuchando al ID
+
+  const fetchAll = async () => {
+    console.log("🚀 [fetchAll] Iniciando peticiones al servidor...");
+    setLoading(true);
+    try {
+      const [normales, especiales, conflictosData] = await Promise.all([
+        getSolicitudesPendientes(),
+        getEspeciales(),
+        getConflictos(),
+      ]);
+
+      // 🔍 LOG 3: Ver qué pasa exactamente cuando se reciben los arreglos vacíos
+      console.log("📥 [fetchAll ÉXITO] Datos recibidos del service:", {
+        normales,
+        especiales,
+        conflictosData
+      });
+
+      setSolicitudes(normales || []);
+      setSolicitudesEspeciales(especiales || []);
+      setConflictos(conflictosData || []);
+      
+      console.log("💾 [fetchAll] Estados de React actualizados.");
+    } catch (err) {
+      console.error("💥 [fetchAll ERROR] Error crítico en la carga:", err);
+    } finally {
+      console.log("🔚 [fetchAll] Finalizando. Seteando loading a false.");
+      setLoading(false);
+    }
+  };
+
+  // ... (aquí sigue el resto de tus filtros y funciones handleAceptar)
 
   const handleAceptar = async (solicitud_id: number) => {
     try {

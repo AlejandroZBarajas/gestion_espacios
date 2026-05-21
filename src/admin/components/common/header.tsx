@@ -1,63 +1,55 @@
-import { useNavigate } from "react-router-dom"
-import { Logout } from "../../../common/logout"
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../common/use_auth"; // 👈 Importamos tu hook de autenticación seguro
 
-export default function Header(){
+export default function Header() {
+    const navigate = useNavigate();
+    const { logout } = useAuth(); // 👈 Traemos el logout del contexto limpio
 
-    const navigate = useNavigate()
-
-    function toSolicitudes(){
-        navigate("/solicitudes")
+    function toSolicitudes() {
+        navigate("/solicitudes");
     }
 
-    function toEspacios(){
-        navigate("/espacios")
+    function toEspacios() {
+        navigate("/espacios");
     }
 
-    function toUsers(){
-        navigate("/usuarios")
+    function toUsers() {
+        navigate("/usuarios");
     }
 
-    function toInventario(){
-        navigate("/inventario")
+    function toInventario() {
+        navigate("/inventario");
     }
 
-    function toPeriodos(){
-        navigate("/periodos")
+    function toPeriodos() {
+        navigate("/periodos");
     }
 
-    function toReportes(){
-        navigate("/reportes")
+    function toReportes() {
+        navigate("/reportes");
     }
 
-    function toMaterias(){
-        navigate("/materias")
+    function toMaterias() {
+        navigate("/materias");
     }
 
-  
-    function byebye(){
-        Logout()
-
-        navigate("/")
+    // 🌟 CORRECCIÓN CRUCIAL:
+    // Ahora usamos el logout controlado por React y localStorage, sin scripts externos invasivos.
+    function byebye() {
+        logout(); // Limpia estado en memoria y localStorage limpiamente
+        navigate("/");
     }
 
-    return(
+    return (
         <div id="header" className="w-full flex flex-row justify-evenly bg-morado h-[100px] items-center"> 
-            <h2 className="text-moradito text-xl font-bold" onClick={toSolicitudes}>Solicitudes</h2>
-    
-            <h2 className="text-moradito text-xl font-bold" onClick={toEspacios}>Espacios</h2>
-        
-            <h2 className="text-moradito text-xl font-bold" onClick={toUsers}>Usuarios</h2>
-        
-            <h2 className="text-moradito text-xl font-bold" onClick={toInventario}>Inventario</h2>
-        
-            <h2 className="text-moradito text-xl font-bold" onClick={toPeriodos}>Periodos</h2>
-        
-            <h2 className="text-moradito text-xl font-bold" onClick={toReportes}>Reportes</h2>
-
-            <h2 className="text-moradito text-xl font-bold" onClick={toMaterias}>Materias</h2>
-
-            <h4 className="text-moradito" onClick={byebye}>Cerrar sesión</h4>
+            <h2 className="text-moradito text-xl font-bold cursor-pointer" onClick={toSolicitudes}>Solicitudes</h2>
+            <h2 className="text-moradito text-xl font-bold cursor-pointer" onClick={toEspacios}>Espacios</h2>
+            <h2 className="text-moradito text-xl font-bold cursor-pointer" onClick={toUsers}>Usuarios</h2>
+            <h2 className="text-moradito text-xl font-bold cursor-pointer" onClick={toInventario}>Inventario</h2>
+            <h2 className="text-moradito text-xl font-bold cursor-pointer" onClick={toPeriodos}>Periodos</h2>
+            <h2 className="text-moradito text-xl font-bold cursor-pointer" onClick={toReportes}>Reportes</h2>
+            <h2 className="text-moradito text-xl font-bold cursor-pointer" onClick={toMaterias}>Materias</h2>
+            <h4 className="text-moradito cursor-pointer font-semibold hover:text-red-300" onClick={byebye}>Cerrar sesión</h4>
         </div>
-
-    )
+    );
 }
